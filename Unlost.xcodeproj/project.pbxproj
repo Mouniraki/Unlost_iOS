@@ -7,13 +7,52 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E10C91AF287D7D0C00CC062F /* SettingsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91AE287D7D0C00CC062F /* SettingsMenu.swift */; };
+		E10C91B1287D949800CC062F /* TextMessageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91B0287D949800CC062F /* TextMessageLayout.swift */; };
+		E10C91B3287D99D900CC062F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91B2287D99D900CC062F /* Message.swift */; };
+		E10C91B6287DA56200CC062F /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91B5287DA56200CC062F /* Conversation.swift */; };
+		E10C91B8287DA8C300CC062F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91B7287DA8C300CC062F /* User.swift */; };
+		E10C91BE287DDAEC00CC062F /* PicMessageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91BD287DDAEC00CC062F /* PicMessageLayout.swift */; };
+		E10C91C1287DDBEA00CC062F /* TextMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91C0287DDBEA00CC062F /* TextMessage.swift */; };
+		E10C91C3287DE26700CC062F /* PicMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91C2287DE26700CC062F /* PicMessage.swift */; };
+		E10C91C5287DE54500CC062F /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91C4287DE54500CC062F /* AudioRecorder.swift */; };
+		E10C91C7287DF2FC00CC062F /* LocationMessageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91C6287DF2FC00CC062F /* LocationMessageLayout.swift */; };
+		E10C91C9287DF32100CC062F /* LocationMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10C91C8287DF32100CC062F /* LocationMessage.swift */; };
+		E13C3AD028800FC300A88806 /* ChatMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C3ACF28800FC300A88806 /* ChatMapView.swift */; };
+		E13C3AD22880684800A88806 /* MapAnnotationLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C3AD12880684800A88806 /* MapAnnotationLayout.swift */; };
+		E13C3AD42880704F00A88806 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C3AD32880704F00A88806 /* ImagePicker.swift */; };
+		E15E16E7288488D8009F7208 /* Tada-sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E15E16E6288488D8009F7208 /* Tada-sound.mp3 */; };
+		E15E16E92884A160009F7208 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15E16E82884A160009F7208 /* AudioPlayer.swift */; };
+		E162B7A42880BC7B00924626 /* MessagesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7A32880BC7B00924626 /* MessagesRepository.swift */; };
+		E162B7A628814F4800924626 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7A528814F4800924626 /* QRCodeView.swift */; };
+		E162B7A82881519100924626 /* ItemsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7A72881519100924626 /* ItemsRepository.swift */; };
+		E162B7AA2881BF7B00924626 /* AudioMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7A92881BF7B00924626 /* AudioMessage.swift */; };
+		E162B7AC2881C27200924626 /* AudioMessageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7AB2881C27200924626 /* AudioMessageLayout.swift */; };
+		E162B7AE28820BB900924626 /* ConversationsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7AD28820BB900924626 /* ConversationsRepository.swift */; };
 		E1696921287C12E300BF5BA9 /* UnlostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1696920287C12E300BF5BA9 /* UnlostApp.swift */; };
-		E1696923287C12E300BF5BA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1696922287C12E300BF5BA9 /* ContentView.swift */; };
+		E1696923287C12E300BF5BA9 /* ItemsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1696922287C12E300BF5BA9 /* ItemsMenu.swift */; };
 		E1696925287C12E600BF5BA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1696924287C12E600BF5BA9 /* Assets.xcassets */; };
 		E1696928287C12E600BF5BA9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1696927287C12E600BF5BA9 /* Preview Assets.xcassets */; };
 		E1696932287C12E600BF5BA9 /* UnlostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1696931287C12E600BF5BA9 /* UnlostTests.swift */; };
 		E169693C287C12E600BF5BA9 /* UnlostUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169693B287C12E600BF5BA9 /* UnlostUITests.swift */; };
 		E169693E287C12E600BF5BA9 /* UnlostUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169693D287C12E600BF5BA9 /* UnlostUITestsLaunchTests.swift */; };
+		E169694B287C13C900BF5BA9 /* ItemLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169694A287C13C900BF5BA9 /* ItemLayout.swift */; };
+		E16ED750287F337E000E87D2 /* ItemMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16ED74F287F337E000E87D2 /* ItemMapView.swift */; };
+		E1AD42AE287F02B900DB7416 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = E1AD42AD287F02B900DB7416 /* CodeScanner */; };
+		E1AD42B0287F02D600DB7416 /* QRScanMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AD42AF287F02D600DB7416 /* QRScanMenu.swift */; };
+		E1B2EABF287C16AD007B650C /* ChatMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EABE287C16AD007B650C /* ChatMenu.swift */; };
+		E1B2EAC1287C177C007B650C /* ChatEntryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EAC0287C177C007B650C /* ChatEntryLayout.swift */; };
+		E1B2EAC3287C1E57007B650C /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EAC2287C1E57007B650C /* ChatView.swift */; };
+		E1B2EAC5287CBE5B007B650C /* MapMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EAC4287CBE5B007B650C /* MapMenu.swift */; };
+		E1B2EAC7287CC1EF007B650C /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EAC6287CC1EF007B650C /* MainMenu.swift */; };
+		E1B2EAC9287CCB4D007B650C /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EAC8287CCB4D007B650C /* Item.swift */; };
+		E1B2EACB287CD26D007B650C /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EACA287CD26D007B650C /* ItemView.swift */; };
+		E1B2EAD3287CD383007B650C /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EAD2287CD383007B650C /* AddItemView.swift */; };
+		E1EC649E28854BDC00E2E8C6 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC649D28854BDC00E2E8C6 /* UserRepository.swift */; };
+		E1EC64A02885864700E2E8C6 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC649F2885864700E2E8C6 /* Location.swift */; };
+		E1EC64A2288597CA00E2E8C6 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC64A1288597CA00E2E8C6 /* LocationService.swift */; };
+		E1EC64A62885F17300E2E8C6 /* SignInMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC64A52885F17300E2E8C6 /* SignInMenu.swift */; };
+		E1EC64A82885F7BE00E2E8C6 /* LocalSignInRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC64A72885F7BE00E2E8C6 /* LocalSignInRepo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +73,31 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E10C91AE287D7D0C00CC062F /* SettingsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenu.swift; sourceTree = "<group>"; };
+		E10C91B0287D949800CC062F /* TextMessageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageLayout.swift; sourceTree = "<group>"; };
+		E10C91B2287D99D900CC062F /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		E10C91B5287DA56200CC062F /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		E10C91B7287DA8C300CC062F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E10C91BD287DDAEC00CC062F /* PicMessageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicMessageLayout.swift; sourceTree = "<group>"; };
+		E10C91C0287DDBEA00CC062F /* TextMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessage.swift; sourceTree = "<group>"; };
+		E10C91C2287DE26700CC062F /* PicMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicMessage.swift; sourceTree = "<group>"; };
+		E10C91C4287DE54500CC062F /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		E10C91C6287DF2FC00CC062F /* LocationMessageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMessageLayout.swift; sourceTree = "<group>"; };
+		E10C91C8287DF32100CC062F /* LocationMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMessage.swift; sourceTree = "<group>"; };
+		E13C3ACF28800FC300A88806 /* ChatMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMapView.swift; sourceTree = "<group>"; };
+		E13C3AD12880684800A88806 /* MapAnnotationLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotationLayout.swift; sourceTree = "<group>"; };
+		E13C3AD32880704F00A88806 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		E15E16E6288488D8009F7208 /* Tada-sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Tada-sound.mp3"; sourceTree = "<group>"; };
+		E15E16E82884A160009F7208 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		E162B7A32880BC7B00924626 /* MessagesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRepository.swift; sourceTree = "<group>"; };
+		E162B7A528814F4800924626 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		E162B7A72881519100924626 /* ItemsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsRepository.swift; sourceTree = "<group>"; };
+		E162B7A92881BF7B00924626 /* AudioMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessage.swift; sourceTree = "<group>"; };
+		E162B7AB2881C27200924626 /* AudioMessageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessageLayout.swift; sourceTree = "<group>"; };
+		E162B7AD28820BB900924626 /* ConversationsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsRepository.swift; sourceTree = "<group>"; };
 		E169691D287C12E300BF5BA9 /* Unlost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unlost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1696920287C12E300BF5BA9 /* UnlostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlostApp.swift; sourceTree = "<group>"; };
-		E1696922287C12E300BF5BA9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E1696922287C12E300BF5BA9 /* ItemsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsMenu.swift; sourceTree = "<group>"; };
 		E1696924287C12E600BF5BA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E1696927287C12E600BF5BA9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E169692D287C12E600BF5BA9 /* UnlostTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnlostTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +105,22 @@
 		E1696937287C12E600BF5BA9 /* UnlostUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnlostUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E169693B287C12E600BF5BA9 /* UnlostUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlostUITests.swift; sourceTree = "<group>"; };
 		E169693D287C12E600BF5BA9 /* UnlostUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlostUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E169694A287C13C900BF5BA9 /* ItemLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemLayout.swift; sourceTree = "<group>"; };
+		E16ED74F287F337E000E87D2 /* ItemMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMapView.swift; sourceTree = "<group>"; };
+		E1AD42AF287F02D600DB7416 /* QRScanMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanMenu.swift; sourceTree = "<group>"; };
+		E1B2EABE287C16AD007B650C /* ChatMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenu.swift; sourceTree = "<group>"; };
+		E1B2EAC0287C177C007B650C /* ChatEntryLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEntryLayout.swift; sourceTree = "<group>"; };
+		E1B2EAC2287C1E57007B650C /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		E1B2EAC4287CBE5B007B650C /* MapMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMenu.swift; sourceTree = "<group>"; };
+		E1B2EAC6287CC1EF007B650C /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		E1B2EAC8287CCB4D007B650C /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		E1B2EACA287CD26D007B650C /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
+		E1B2EAD2287CD383007B650C /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
+		E1EC649D28854BDC00E2E8C6 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		E1EC649F2885864700E2E8C6 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		E1EC64A1288597CA00E2E8C6 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		E1EC64A52885F17300E2E8C6 /* SignInMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInMenu.swift; sourceTree = "<group>"; };
+		E1EC64A72885F7BE00E2E8C6 /* LocalSignInRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalSignInRepo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1AD42AE287F02B900DB7416 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +149,61 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E10C91A8287D64A600CC062F /* viewmodel */ = {
+			isa = PBXGroup;
+			children = (
+				E1EC64A1288597CA00E2E8C6 /* LocationService.swift */,
+				E13C3AD32880704F00A88806 /* ImagePicker.swift */,
+				E10C91C4287DE54500CC062F /* AudioRecorder.swift */,
+				E15E16E82884A160009F7208 /* AudioPlayer.swift */,
+			);
+			path = viewmodel;
+			sourceTree = "<group>";
+		};
+		E10C91B4287DA3E300CC062F /* MessageLayouts */ = {
+			isa = PBXGroup;
+			children = (
+				E10C91B0287D949800CC062F /* TextMessageLayout.swift */,
+				E10C91C6287DF2FC00CC062F /* LocationMessageLayout.swift */,
+				E10C91BD287DDAEC00CC062F /* PicMessageLayout.swift */,
+				E162B7AB2881C27200924626 /* AudioMessageLayout.swift */,
+			);
+			path = MessageLayouts;
+			sourceTree = "<group>";
+		};
+		E10C91BF287DDBDB00CC062F /* MessageKinds */ = {
+			isa = PBXGroup;
+			children = (
+				E10C91C0287DDBEA00CC062F /* TextMessage.swift */,
+				E10C91C2287DE26700CC062F /* PicMessage.swift */,
+				E10C91C8287DF32100CC062F /* LocationMessage.swift */,
+				E162B7A92881BF7B00924626 /* AudioMessage.swift */,
+			);
+			path = MessageKinds;
+			sourceTree = "<group>";
+		};
+		E15E16E5288488BA009F7208 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				E15E16E6288488D8009F7208 /* Tada-sound.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		E162B7A22880BC3200924626 /* repositories */ = {
+			isa = PBXGroup;
+			children = (
+				E1EC64AA2886814700E2E8C6 /* firebase */,
+				E1EC64A92886814200E2E8C6 /* local */,
+				E162B7A32880BC7B00924626 /* MessagesRepository.swift */,
+				E162B7A72881519100924626 /* ItemsRepository.swift */,
+				E162B7AD28820BB900924626 /* ConversationsRepository.swift */,
+				E1EC649D28854BDC00E2E8C6 /* UserRepository.swift */,
+				E1EC64A72885F7BE00E2E8C6 /* LocalSignInRepo.swift */,
+			);
+			path = repositories;
+			sourceTree = "<group>";
+		};
 		E1696914287C12E300BF5BA9 = {
 			isa = PBXGroup;
 			children = (
@@ -94,8 +227,12 @@
 		E169691F287C12E300BF5BA9 /* Unlost */ = {
 			isa = PBXGroup;
 			children = (
+				E15E16E5288488BA009F7208 /* Sounds */,
+				E162B7A22880BC3200924626 /* repositories */,
+				E10C91A8287D64A600CC062F /* viewmodel */,
+				E1B2EACD287CD2B0007B650C /* view */,
+				E1B2EACC287CD28D007B650C /* model */,
 				E1696920287C12E300BF5BA9 /* UnlostApp.swift */,
-				E1696922287C12E300BF5BA9 /* ContentView.swift */,
 				E1696924287C12E600BF5BA9 /* Assets.xcassets */,
 				E1696926287C12E600BF5BA9 /* Preview Content */,
 			);
@@ -127,6 +264,81 @@
 			path = UnlostUITests;
 			sourceTree = "<group>";
 		};
+		E1B2EACC287CD28D007B650C /* model */ = {
+			isa = PBXGroup;
+			children = (
+				E10C91B2287D99D900CC062F /* Message.swift */,
+				E10C91BF287DDBDB00CC062F /* MessageKinds */,
+				E1B2EAC8287CCB4D007B650C /* Item.swift */,
+				E10C91B5287DA56200CC062F /* Conversation.swift */,
+				E10C91B7287DA8C300CC062F /* User.swift */,
+				E1EC649F2885864700E2E8C6 /* Location.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		E1B2EACD287CD2B0007B650C /* view */ = {
+			isa = PBXGroup;
+			children = (
+				E1B2EAC6287CC1EF007B650C /* MainMenu.swift */,
+				E1B2EAD1287CD319007B650C /* map */,
+				E1B2EACF287CD2EB007B650C /* chat */,
+				E1B2EACE287CD2D1007B650C /* items */,
+				E10C91AE287D7D0C00CC062F /* SettingsMenu.swift */,
+				E1AD42AF287F02D600DB7416 /* QRScanMenu.swift */,
+				E1EC64A52885F17300E2E8C6 /* SignInMenu.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		E1B2EACE287CD2D1007B650C /* items */ = {
+			isa = PBXGroup;
+			children = (
+				E1696922287C12E300BF5BA9 /* ItemsMenu.swift */,
+				E1B2EACA287CD26D007B650C /* ItemView.swift */,
+				E169694A287C13C900BF5BA9 /* ItemLayout.swift */,
+				E1B2EAD2287CD383007B650C /* AddItemView.swift */,
+				E162B7A528814F4800924626 /* QRCodeView.swift */,
+			);
+			path = items;
+			sourceTree = "<group>";
+		};
+		E1B2EACF287CD2EB007B650C /* chat */ = {
+			isa = PBXGroup;
+			children = (
+				E10C91B4287DA3E300CC062F /* MessageLayouts */,
+				E1B2EABE287C16AD007B650C /* ChatMenu.swift */,
+				E1B2EAC2287C1E57007B650C /* ChatView.swift */,
+				E1B2EAC0287C177C007B650C /* ChatEntryLayout.swift */,
+			);
+			path = chat;
+			sourceTree = "<group>";
+		};
+		E1B2EAD1287CD319007B650C /* map */ = {
+			isa = PBXGroup;
+			children = (
+				E13C3AD12880684800A88806 /* MapAnnotationLayout.swift */,
+				E13C3ACF28800FC300A88806 /* ChatMapView.swift */,
+				E16ED74F287F337E000E87D2 /* ItemMapView.swift */,
+				E1B2EAC4287CBE5B007B650C /* MapMenu.swift */,
+			);
+			path = map;
+			sourceTree = "<group>";
+		};
+		E1EC64A92886814200E2E8C6 /* local */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = local;
+			sourceTree = "<group>";
+		};
+		E1EC64AA2886814700E2E8C6 /* firebase */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = firebase;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +355,9 @@
 			dependencies = (
 			);
 			name = Unlost;
+			packageProductDependencies = (
+				E1AD42AD287F02B900DB7416 /* CodeScanner */,
+			);
 			productName = Unlost;
 			productReference = E169691D287C12E300BF5BA9 /* Unlost.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +430,9 @@
 				Base,
 			);
 			mainGroup = E1696914287C12E300BF5BA9;
+			packageReferences = (
+				E1AD42AC287F02B900DB7416 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+			);
 			productRefGroup = E169691E287C12E300BF5BA9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -232,6 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1696928287C12E600BF5BA9 /* Preview Assets.xcassets in Resources */,
+				E15E16E7288488D8009F7208 /* Tada-sound.mp3 in Resources */,
 				E1696925287C12E600BF5BA9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,8 +476,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1696923287C12E300BF5BA9 /* ContentView.swift in Sources */,
+				E10C91AF287D7D0C00CC062F /* SettingsMenu.swift in Sources */,
+				E15E16E92884A160009F7208 /* AudioPlayer.swift in Sources */,
+				E10C91C9287DF32100CC062F /* LocationMessage.swift in Sources */,
+				E10C91C1287DDBEA00CC062F /* TextMessage.swift in Sources */,
+				E162B7A628814F4800924626 /* QRCodeView.swift in Sources */,
+				E1B2EAC5287CBE5B007B650C /* MapMenu.swift in Sources */,
+				E1EC64A2288597CA00E2E8C6 /* LocationService.swift in Sources */,
+				E1B2EAC9287CCB4D007B650C /* Item.swift in Sources */,
+				E169694B287C13C900BF5BA9 /* ItemLayout.swift in Sources */,
+				E10C91C3287DE26700CC062F /* PicMessage.swift in Sources */,
+				E1EC64A62885F17300E2E8C6 /* SignInMenu.swift in Sources */,
+				E1B2EACB287CD26D007B650C /* ItemView.swift in Sources */,
+				E162B7A42880BC7B00924626 /* MessagesRepository.swift in Sources */,
+				E10C91B1287D949800CC062F /* TextMessageLayout.swift in Sources */,
+				E16ED750287F337E000E87D2 /* ItemMapView.swift in Sources */,
+				E1696923287C12E300BF5BA9 /* ItemsMenu.swift in Sources */,
+				E10C91C7287DF2FC00CC062F /* LocationMessageLayout.swift in Sources */,
+				E1EC64A02885864700E2E8C6 /* Location.swift in Sources */,
+				E10C91B8287DA8C300CC062F /* User.swift in Sources */,
+				E1B2EAC7287CC1EF007B650C /* MainMenu.swift in Sources */,
+				E10C91B6287DA56200CC062F /* Conversation.swift in Sources */,
+				E162B7AC2881C27200924626 /* AudioMessageLayout.swift in Sources */,
+				E13C3AD028800FC300A88806 /* ChatMapView.swift in Sources */,
+				E162B7AA2881BF7B00924626 /* AudioMessage.swift in Sources */,
+				E1AD42B0287F02D600DB7416 /* QRScanMenu.swift in Sources */,
+				E1B2EABF287C16AD007B650C /* ChatMenu.swift in Sources */,
+				E10C91C5287DE54500CC062F /* AudioRecorder.swift in Sources */,
 				E1696921287C12E300BF5BA9 /* UnlostApp.swift in Sources */,
+				E162B7AE28820BB900924626 /* ConversationsRepository.swift in Sources */,
+				E1B2EAD3287CD383007B650C /* AddItemView.swift in Sources */,
+				E10C91BE287DDAEC00CC062F /* PicMessageLayout.swift in Sources */,
+				E10C91B3287D99D900CC062F /* Message.swift in Sources */,
+				E13C3AD22880684800A88806 /* MapAnnotationLayout.swift in Sources */,
+				E13C3AD42880704F00A88806 /* ImagePicker.swift in Sources */,
+				E162B7A82881519100924626 /* ItemsRepository.swift in Sources */,
+				E1B2EAC3287C1E57007B650C /* ChatView.swift in Sources */,
+				E1EC649E28854BDC00E2E8C6 /* UserRepository.swift in Sources */,
+				E1EC64A82885F7BE00E2E8C6 /* LocalSignInRepo.swift in Sources */,
+				E1B2EAC1287C177C007B650C /* ChatEntryLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,13 +673,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Unlost/Preview Content\"";
+				DEVELOPMENT_TEAM = Y8GC7MQ56D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Unlost/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This is required to scan QR codes & take pictures.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This is needed to register the last location of devices and for the chat.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This is required to be able to send voice messages.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -445,13 +708,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Unlost/Preview Content\"";
+				DEVELOPMENT_TEAM = Y8GC7MQ56D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Unlost/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This is required to scan QR codes & take pictures.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This is needed to register the last location of devices and for the chat.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This is required to be able to send voice messages.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -577,6 +847,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E1AD42AC287F02B900DB7416 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E1AD42AD287F02B900DB7416 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1AD42AC287F02B900DB7416 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E1696915287C12E300BF5BA9 /* Project object */;
 }
