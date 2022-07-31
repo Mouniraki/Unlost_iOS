@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct MapMenu: View {
-    @EnvironmentObject var itemsRepo: ItemsRepository
+    @EnvironmentObject var itemsRepo: FIRItemsRepository
         
     @State private var showPinDescription = false
     @State private var showSettingsSheet = false
@@ -34,7 +34,12 @@ struct MapMenu: View {
             Location(latitude: newEl!.latitude + lastRes.latitude, longitude: newEl!.longitude + lastRes.longitude)
         }
         
-        return Location(latitude: accLoc.latitude / locationsCount, longitude: accLoc.longitude / locationsCount).toCLLocation()
+        if locationsCount > 0 {
+            return Location(latitude: accLoc.latitude / locationsCount, longitude: accLoc.longitude / locationsCount).toCLLocation()
+        } else {
+            return Location(latitude: 45.0, longitude: 2.0).toCLLocation()
+        }
+
     }
     
     var body: some View {
@@ -83,6 +88,6 @@ struct MapMenu: View {
 struct MapMenu_Previews: PreviewProvider {
     static var previews: some View {
         MapMenu()
-            .environmentObject(ItemsRepository())
+            .environmentObject(FIRItemsRepository())
     }
 }

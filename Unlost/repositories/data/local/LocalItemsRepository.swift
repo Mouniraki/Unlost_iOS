@@ -1,27 +1,19 @@
 //
-//  ItemsRepository.swift
+//  LocalItemsRepository.swift
 //  Unlost
 //
-//  Created by Mounir Raki on 15.07.22.
+//  Created by Mounir Raki on 19.07.22.
 //
 
 import Foundation
-import CoreLocation
 
-class ItemsRepository: ObservableObject {
+final class LocalItemsRepository: ItemsRepository {
+    private(set) var signedInUserID: String? = "MYUSERID"
+    
     @Published private(set) var items: [Item] = []
     
     init() {
         getItems()
-    }
-    
-    func findItemInList(item: Item) -> Int{
-        for i in 0..<items.count {
-            if items[i].id == item.id {
-                return i
-            }
-        }
-        return -1
     }
     
     func getItems() {
@@ -66,14 +58,19 @@ class ItemsRepository: ObservableObject {
                  ),
                  isLost: false)
         ]
+        
+//        completionHandler(true)
     }
     
-    func addItem(item: Item) {
+    func addItem(item: Item, _ completionHandler: @escaping (Bool) -> Void) {
         self.items.append(item)
+        completionHandler(true)
     }
     
-    func removeItem(at offsets: IndexSet) {
+    func removeItem(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void) {
         self.items.remove(atOffsets: offsets)
+        completionHandler(true)
     }
+    
     
 }

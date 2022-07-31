@@ -11,7 +11,7 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 
 struct ItemView: View {
-    @EnvironmentObject var itemsRepo: ItemsRepository
+    @EnvironmentObject var itemsRepo: FIRItemsRepository
     
     let item: Item
     
@@ -79,9 +79,14 @@ struct ItemView: View {
                 .foregroundColor(.red)
                 .alert("Are you sure to delete this item ?", isPresented: $showDeletePrompt) {
                     Button("Delete", role: .destructive) {
-                        itemsRepo.removeItem(at: IndexSet(
-                            integer: itemsRepo.findItemInList(item: item)
-                        ))
+                        itemsRepo.removeItem(
+                            at: IndexSet(
+                                integer: itemsRepo.findItemInList(
+                                    items: itemsRepo.items,
+                                    item: item)
+                            )){ success in
+                                //TODO: INSERT CODE HERE
+                            }
                     }
                     Button("Cancel", role: .cancel){}
                 }
@@ -93,6 +98,6 @@ struct ItemView: View {
 struct ItemView_Previews: PreviewProvider {
     static var previews: some View {
         ItemView(item: Item.example)
-            .environmentObject(ItemsRepository())
+            .environmentObject(FIRItemsRepository())
     }
 }

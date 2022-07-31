@@ -9,17 +9,16 @@ import SwiftUI
 
 struct SettingsMenu: View {
     @Environment (\.presentationMode) var presentationMode
-    @EnvironmentObject var userRepo: UserRepository
-    @EnvironmentObject var signInRepo: LocalSignInRepo
-    
+    @EnvironmentObject var userRepo: FIRUserRepository
+    @EnvironmentObject var signInRepo: GoogleSignInRepo
     
     @State private var enableDarkMode = false
     @State private var showSheet = false
     @State private var pickFromCamera = false
     @State private var showSignOutAlert = false
+    @State private var showSignOutErrorAlert = false
     
     var body: some View {
-        
         NavigationView {
             VStack{
                 if let user = userRepo.user {
@@ -77,10 +76,15 @@ struct SettingsMenu: View {
                     .foregroundColor(.red)
                     .alert("Are you sure you want to sign out?", isPresented: $showSignOutAlert) {
                         Button("Sign out", role: .destructive) {
-                            signInRepo.signOut()
+                            signInRepo.signOut { success in
+                                showSignOutErrorAlert = !success
+                            }
                             presentationMode.wrappedValue.dismiss()
                         }
                         Button("Cancel", role: .cancel) {}
+                    }
+                    .alert("Error while signing out. Check your internet connection and try again.", isPresented: $showSignOutErrorAlert) {
+                        Button("OK", role: .cancel){}
                     }
                 }
             }
@@ -94,7 +98,12 @@ struct SettingsMenu: View {
             .sheet(isPresented: $showSheet){
                 //TODO: FIND A WAY TO RESCALE IMAGES IN ORDER TO FILL IN THE IMAGEHOLDER
                 ImagePicker(fromCameraBool: $pickFromCamera) { image in
-                    userRepo.setNewProfilePicture(uiImage: image ?? UIImage(systemName: "person.fill")!)
+                    //TODO: REPLACE USERID BY ACTUAL UID
+                    userRepo.setNewProfilePicture(
+                        uiImage: image ?? UIImage(systemName: "person.fill")!){
+                            success in
+                            // TODO: INSERT CODE HERE
+                        }
                 }
             }
         }
@@ -104,7 +113,7 @@ struct SettingsMenu: View {
 struct SettingsMenu_Previews: PreviewProvider {
     static var previews: some View {
         SettingsMenu()
-            .environmentObject(UserRepository())
-            .environmentObject(LocalSignInRepo())
+            .environmentObject(FIRUserRepository())
+            .environmentObject(GoogleSignInRepo())
     }
 }

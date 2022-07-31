@@ -1,23 +1,24 @@
 //
-//  MessageRepository.swift
+//  FBMessagesRepository.swift
 //  Unlost
 //
-//  Created by Mounir Raki on 14.07.22.
+//  Created by Mounir Raki on 19.07.22.
 //
 
 import Foundation
 import UIKit
-import CoreLocation
 
-class MessagesRepository: ObservableObject {
+final class LocalMessagesRepository: MessagesRepository {
+    private(set) var signedInUserID: String? = "MYUSERID"
+    
     @Published private(set) var messages: [Message] = []
-    @Published private(set) var lastMessageId = ""
+    @Published private(set) var lastMessageId: String = ""
     
     init(){
-        getMessages()
+        getMessages(convID: "DUMMYCONVID")
     }
     
-    func getMessages() {
+    func getMessages(convID: String) {
         self.messages = [
             LocationMessage(id: "MESSAGE4",
                       isReceived: true,
@@ -41,7 +42,6 @@ class MessagesRepository: ObservableObject {
                       timestamp: Date(timeIntervalSince1970: TimeInterval(1657629700)),
                        image: UIImage(named: "all-out-donuts-thumb")!),
             
-            
             TextMessage(id: "MESSAGE2",
                     isReceived: true,
                     timestamp: Date(timeIntervalSince1970: TimeInterval(1657629474)),
@@ -58,10 +58,14 @@ class MessagesRepository: ObservableObject {
         if let id = self.messages.last?.id {
             self.lastMessageId = id
         }
+        
+//        completionHandler(true)
     }
     
-    func sendMessage(message: Message) {
+    func sendMessage(convID: String, message: Message, _ completionHandler: @escaping (Bool) -> Void) {
         self.messages.append(message)
         self.lastMessageId = message.id
+        
+        completionHandler(true)
     }
 }

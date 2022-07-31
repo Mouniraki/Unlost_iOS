@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-enum ItemType: CaseIterable, CustomStringConvertible {
+enum ItemType: Int, CaseIterable, CustomStringConvertible {
     case Wallet, Phone, Keys, Headphones
     
     var description: String {
@@ -22,6 +22,10 @@ enum ItemType: CaseIterable, CustomStringConvertible {
         case .Headphones:
             return "Headphones"
         }
+    }
+    
+    static func getItemTypeFromID(id: Int) -> ItemType {
+        return ItemType.allCases[id]
     }
 }
 

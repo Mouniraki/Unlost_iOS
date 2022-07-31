@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddItemView: View {
     @Environment (\.presentationMode) var presentationMode
-    @EnvironmentObject var itemsRepo: ItemsRepository
+    @EnvironmentObject var itemsRepo: FIRItemsRepository
     
     @State private var itemName = ""
     @State private var itemDesc = ""
@@ -40,6 +40,7 @@ struct AddItemView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
+                        //TODO: REPLACE USER ID BY ACTUAL USER ID
                         itemsRepo.addItem(
                             item: Item(id: "MOUNIRITEM\(itemsRepo.items.count + 1)",
                                        name: itemName,
@@ -47,7 +48,9 @@ struct AddItemView: View {
                                        type: itemType,
                                        lastLocation: nil,
                                        isLost: false)
-                        )
+                        ) { success in
+                            // TODO: INSERT CODE HERE
+                        }
                         
                         presentationMode.wrappedValue.dismiss()
                     }.disabled(itemName.isEmpty || itemDesc.isEmpty)
@@ -66,6 +69,6 @@ struct AddItemView: View {
 struct AddItemView_Previews: PreviewProvider {
     static var previews: some View {
         AddItemView()
-            .environmentObject(ItemsRepository())
+            .environmentObject(FIRItemsRepository())
     }
 }

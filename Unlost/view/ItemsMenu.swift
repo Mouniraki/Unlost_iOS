@@ -9,19 +9,19 @@ import SwiftUI
 import CoreLocation
 
 struct ItemsMenu: View {
-    @EnvironmentObject var itemsRepo: ItemsRepository
+    @EnvironmentObject var itemsRepo: FIRItemsRepository
     
     @State private var showAddItemSheet = false
     @State private var showQrScanSheet = false
     @State private var showSettingsMenu = false
     
-    //TODO: FIND A WAY TO INSTANTIATE THE VIEWMODEL ONLY ONCE
-    
     /**
      Removes items at given offsets.
      */
-    func deleteItems(at offsets: IndexSet){ //TODO: MOVE THIS TO VIEWMODEL CLASS
-        itemsRepo.removeItem(at: offsets)
+    func deleteItems(at offsets: IndexSet){ // TODO: MOVE THIS TO VIEWMODEL CLASS
+        itemsRepo.removeItem(at: offsets) { success in
+            //TODO: INSERT CODE HERE
+        }
     }
     
     var body: some View {
@@ -77,6 +77,6 @@ struct ItemsMenu: View {
 struct ItemsMenu_Previews: PreviewProvider {
     static var previews: some View {
         ItemsMenu()
-            .environmentObject(ItemsRepository())
+            .environmentObject(FIRItemsRepository())
     }
 }

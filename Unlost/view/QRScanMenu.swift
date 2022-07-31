@@ -10,7 +10,7 @@ import SwiftUI
 
 struct QRScanMenu: View {
     @Environment (\.presentationMode) var presentationMode
-    @EnvironmentObject var convRepo: ConversationsRepository
+    @EnvironmentObject var convRepo: LocalConversationsRepository
     
     @State private var qrText = ""
     @State private var isValid = false
@@ -66,24 +66,15 @@ struct QRScanMenu: View {
                             Button {
                                 showProgressView = true
                                 textFieldId = UUID().uuidString
+                                let splittedQrText = qrText.split(separator: ":")
                                 
                                 if locationService.lastLocation == nil {
                                     showProgressView = false
                                     showLocationErrorAlert.toggle()
                                 } else {
-                                    let conversation = Conversation(id: "DUMMY:DUMMY",
-                                                                    user: User(id: "USERID",
-                                                                               firstName: "User",
-                                                                               lastName: "Name",
-                                                                               profilePicture: UIImage(systemName: "eye")!),
-                                                                    item: Item(id: "ITEMID",
-                                                                               name: "MyItem",
-                                                                               description: "MyDesc",
-                                                                               type: .Keys,
-                                                                               isLost: true),
-                                                                    isMyItem: false)
-                                    
-                                    convRepo.addConversation(conversation: conversation) { isSuccess in
+                                    convRepo.addConversation(
+                                        qrID: (String(splittedQrText[0]), String(splittedQrText[1]))
+                                    ) { isSuccess in
                                         showProgressView = false
                                         showSuccessAlert = isSuccess
                                         showProcessingErrorAlert = !isSuccess
@@ -93,6 +84,7 @@ struct QRScanMenu: View {
                             } label: {
                                 Label(isValidText, systemImage: isValid ? "arrow.up.doc": "exclamationmark.triangle")
                             }
+                            .disabled(!isValid)
                             .alert("Thank you ! The user has been notified.", isPresented: $showSuccessAlert) {
                                 Button("OK", role: .cancel){
                                     presentationMode.wrappedValue.dismiss()
@@ -106,7 +98,6 @@ struct QRScanMenu: View {
                             .alert("Error: the QR code doesn't belong to a valid item, or you already notified the user for this item.", isPresented: $showProcessingErrorAlert){
                                 Button("OK", role: .cancel){}
                             }
-                            .disabled(!isValid)
                             
                         }
                     }
@@ -152,6 +143,6 @@ struct QRScanMenu: View {
 struct QRScanMenu_Previews: PreviewProvider {
     static var previews: some View {
         QRScanMenu()
-            .environmentObject(ConversationsRepository())
+            .environmentObject(LocalConversationsRepository())
     }
 }

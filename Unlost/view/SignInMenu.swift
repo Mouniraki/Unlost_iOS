@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import GoogleSignInSwift
 
 struct SignInMenu: View {
-    @EnvironmentObject var signInRepo: LocalSignInRepo
+    @EnvironmentObject var signInRepo: GoogleSignInRepo
     
     // TO BE ABLE TO CHANGE COLORS ACCORDING TO THE CHOSEN UI THEME
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -34,7 +35,6 @@ struct SignInMenu: View {
                 Spacer()
                 
                 Group {
-                    //TODO: REPLACE BUTTON BY REAL SIGNIN WITH GOOGLE BUTTON
                     Button{
                         showProgressBar = true
                         signInRepo.signIn { isSuccess in
@@ -86,6 +86,6 @@ struct SignInMenu: View {
 struct SignInMenu_Previews: PreviewProvider {
     static var previews: some View {
         SignInMenu()
-            .environmentObject(LocalSignInRepo())
+            .environmentObject(GoogleSignInRepo())
     }
 }

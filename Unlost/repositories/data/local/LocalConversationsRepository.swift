@@ -1,21 +1,21 @@
 //
-//  ConversationsRepository.swift
+//  LocalConversationsRepository.swift
 //  Unlost
 //
-//  Created by Mounir Raki on 15.07.22.
+//  Created by Mounir Raki on 19.07.22.
 //
 
 import Foundation
 import UIKit
-import CoreLocation
 
-class ConversationsRepository: ObservableObject {
+final class LocalConversationsRepository: ConversationsRepository {
+    private(set) var signedInUserID: String? = "MYUSERID"
+    
     @Published private(set) var conversations: [Conversation] = []
     
     init() {
         getConversations()
     }
-    
     
     func getConversations() {
         self.conversations = [
@@ -51,17 +51,35 @@ class ConversationsRepository: ObservableObject {
                 isMyItem: false
             )
         ]
+        
+//        completionHandler(true)
     }
     
-    func addConversation(conversation: Conversation, _ completionHandler: @escaping (Bool) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.conversations.append(conversation)
-            completionHandler(true)
+    func addConversation(qrID: (String, String), _ completionHandler: @escaping (Bool) -> Void) {
+        if let id = signedInUserID {
+            let conversation = Conversation(id: id + qrID.0,
+                                            user: User(id: qrID.0,
+                                                       firstName: "User",
+                                                       lastName: "Name",
+                                                       profilePicture: UIImage(systemName: "eye")!),
+                                            item: Item(id: qrID.1,
+                                                       name: "MyItem",
+                                                       description: "MyDesc",
+                                                       type: .Keys,
+                                                       isLost: true),
+                                            isMyItem: false)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.conversations.append(conversation)
+                completionHandler(true)
+            }
         }
     }
     
-    func removeConversation(at offsets: IndexSet) {
+    func removeConversation(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void) {
         self.conversations.remove(atOffsets: offsets)
+        completionHandler(true)
     }
+    
     
 }

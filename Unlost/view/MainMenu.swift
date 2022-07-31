@@ -9,12 +9,9 @@ import SwiftUI
 import CoreLocation
 
 struct MainMenu: View {
-    @EnvironmentObject var signInRepo: LocalSignInRepo
-//    @State private var performTransition = false
+    @EnvironmentObject var signInRepo: GoogleSignInRepo
     
-    var body: some View {
-//        animation(.easeInOut, value: signInRepo.isSignedIn)
-        
+    var body: some View {        
         if !signInRepo.isSignedIn {
             SignInMenu()
         } else {
@@ -23,7 +20,7 @@ struct MainMenu: View {
                     .tabItem{
                         Label("My Items", systemImage: "list.dash")
                     }
-                        
+
                 MapMenu()
                     .tabItem{
                         Label("Map", systemImage: "map")
@@ -41,8 +38,8 @@ struct MainMenu: View {
 struct MainMenu_Previews: PreviewProvider {
     static var previews: some View {
         MainMenu()
-            .environmentObject(ItemsRepository())
-            .environmentObject(ConversationsRepository())
-            .environmentObject(LocalSignInRepo())
+            .environmentObject(FIRItemsRepository())
+            .environmentObject(LocalConversationsRepository())
+            .environmentObject(GoogleSignInRepo())
     }
 }

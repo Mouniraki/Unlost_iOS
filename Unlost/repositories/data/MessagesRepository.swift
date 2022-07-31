@@ -1,0 +1,14 @@
+//
+//  RawMessagesRepository.swift
+//  Unlost
+//
+//  Created by Mounir Raki on 19.07.22.
+//
+
+import Foundation
+
+protocol MessagesRepository: ObservableObject {
+    func getMessages(convID: String)
+    
+    func sendMessage(convID: String, message: Message, _ completionHandler: @escaping (Bool) -> Void)
+}

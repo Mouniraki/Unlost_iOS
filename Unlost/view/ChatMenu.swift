@@ -9,13 +9,17 @@ import SwiftUI
 import CoreLocation
 
 struct ChatMenu: View {
-    @EnvironmentObject var conversationsRepo: ConversationsRepository
+    @EnvironmentObject var conversationsRepo: LocalConversationsRepository
     
     @State private var showSettingsSheet = false
     @State private var showQrScanSheet = false
     
+    //TODO: REPLACE USER ID BY ACTUAL UID
     func deleteItems(at offsets: IndexSet){
-        conversationsRepo.removeConversation(at: offsets)
+        conversationsRepo.removeConversation(at: offsets){
+            success in
+            //TODO: INSERT CODE HERE
+        }
     }
     
     var body: some View {
@@ -64,6 +68,6 @@ struct ChatMenu: View {
 struct ChatMenu_Previews: PreviewProvider {
     static var previews: some View {
         ChatMenu()
-            .environmentObject(ConversationsRepository())
+            .environmentObject(LocalConversationsRepository())
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class LocalSignInRepo: ObservableObject {
+final class LocalSignInRepo: SignInRepository {
     @Published var isSignedIn = false
     
     func signIn(_ completionHandler: @escaping (Bool) -> Void) {
@@ -18,7 +18,8 @@ class LocalSignInRepo: ObservableObject {
         }
     }
     
-    func signOut() {
+    func signOut(_ completionHandler: @escaping (Bool) -> Void) {
         self.isSignedIn = false
+        completionHandler(true)
     }
 }

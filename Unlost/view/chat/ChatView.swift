@@ -12,7 +12,7 @@ import Combine
 
 //TODO: FIND A WAY TO HIDE THE TABVIEW BAR AT THE BOTTOM
 struct ChatView: View {
-    @StateObject var messagesRepo = MessagesRepository()
+    @EnvironmentObject var messagesRepo: LocalMessagesRepository
     
     let conversation: Conversation
     
@@ -78,12 +78,16 @@ struct ChatView: View {
                                 displayNoLocationAlert.toggle()
                             } else {
                                 messagesRepo.sendMessage(
+                                    convID: conversation.id,
                                     message: LocationMessage(
                                         id: "MESSAGE\(messagesRepo.messages.count + 1)",
                                         isReceived: false,
                                         timestamp: Date.now,
                                         coordinates: locationService.lastLocation!)
-                                    )
+                                ){
+                                    success in
+                                    // TODO: INSERT CODE HERE
+                                }
                             }
                         } label: {
                             Label("Send location…", systemImage: "mappin.circle")
@@ -135,11 +139,14 @@ struct ChatView: View {
                         
                         if audioPath != nil {
                             messagesRepo.sendMessage(
+                                convID: conversation.id,
                                 message: AudioMessage(id: "MESSAGE\(messagesRepo.messages.count + 1)",
                                                      isReceived: false,
                                                      timestamp: Date.now,
-                                                      audioUrl: audioPath!)
-                            )
+                                                      audioUrl: audioPath!)){
+                                                          success in
+                                                          //TODO: INSERT CODE HERE
+                                                      }
                         }
                     } label: {
                         if !isRecording {
@@ -158,11 +165,15 @@ struct ChatView: View {
                 } else {
                     Button{
                         messagesRepo.sendMessage(
+                            convID: conversation.id,
                             message: TextMessage(
                                 id: "MESSAGE\(messagesRepo.messages.count + 1)",
                                 isReceived: false,
                                 timestamp: Date.now,
-                                body: messageStr))
+                                body: messageStr)){
+                                    success in
+                                    // TODO: INSERT CODE HERE
+                                }
                         
                         messageStr = ""
                     } label: {
@@ -180,15 +191,21 @@ struct ChatView: View {
                 locationService.requestLocationUpdates()
             }
         }
+        .onAppear {
+            messagesRepo.getMessages(convID: conversation.id)
+        }
         .sheet(isPresented: $showSheet){
             ImagePicker(fromCameraBool: $pickFromCamera){ image in
                 messagesRepo.sendMessage(
+                    convID: conversation.id,
                     message: PicMessage(
                         id: "MESSAGE\(messagesRepo.messages.count + 1)",
                         isReceived: false,
                         timestamp: Date.now,
-                        image: image ?? UIImage())
-                )
+                        image: image ?? UIImage())){
+                            success in
+                            //TODO: INSERT CODE HERE
+                        }
             }
         }
         .alert("Unable to send the location message. Make sure you granted access to location for Unlost.", isPresented: $displayNoLocationAlert) {
@@ -214,5 +231,6 @@ struct ChatView: View {
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         ChatView(conversation: Conversation.example)
+            .environmentObject(LocalMessagesRepository())
     }
 }
