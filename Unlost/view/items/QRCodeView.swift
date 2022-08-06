@@ -10,7 +10,7 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 
 struct QRCodeView: View {
-    @EnvironmentObject var userRepo: FIRUserRepository
+    @EnvironmentObject var signInRepo: GoogleSignInRepo
     let item: Item
     
     let context = CIContext()
@@ -18,7 +18,7 @@ struct QRCodeView: View {
     
     
     var body: some View {
-        if let userID = userRepo.signedInUserID {
+        if let userID = signInRepo.signedInUserID {
             let qrStr = "\(userID):\(item.id)"
         
             VStack{
@@ -53,6 +53,6 @@ struct QRCodeView: View {
 struct QRCodeView_Previews: PreviewProvider {
     static var previews: some View {
         QRCodeView(item: Item.example)
-            .environmentObject(FIRUserRepository())
+            .environmentObject(GoogleSignInRepo())
     }
 }

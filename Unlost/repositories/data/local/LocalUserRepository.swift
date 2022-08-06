@@ -8,15 +8,16 @@
 import Foundation
 import UIKit
 
-final class LocalUserRepository: UserRepository {    
+final class LocalUserRepository: UserRepository {
     private(set) var signedInUserID: String? = "MYUSERID"
     
     @Published private(set) var user: User? = nil
     
-    init() {
-        getUser(userID: signedInUserID) { user in
-            self.user = user
-        }
+    func getCurrentUser() {
+        self.user = User(id: "USER1",
+                         firstName: "Mounir",
+                         lastName: "Raki",
+                         profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
     }
     
     func getUser(userID: String?, _ completionHandler: @escaping (User?) -> Void) {
@@ -28,9 +29,13 @@ final class LocalUserRepository: UserRepository {
         )
     }
     
-    func setNewProfilePicture(uiImage: UIImage, _ completionHandler: @escaping (Bool) -> Void) {
-        self.user?.profilePicture = uiImage
+    func setNewProfilePicture(imageURL: URL, _ completionHandler: @escaping (Bool) -> Void) {
+        self.user?.profilePicture = UIImage()
         completionHandler(true)
+    }
+    
+    func resetUser() {
+        self.user = nil
     }
     
     

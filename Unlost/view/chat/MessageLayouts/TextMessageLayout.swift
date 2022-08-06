@@ -21,7 +21,7 @@ struct TextMessageLayout: View {
             }
             .frame(maxWidth: 300, alignment: message.isReceived ? .leading : .trailing)
             
-            Text(message.timestamp.formatted(.dateTime.day().month().year().hour().minute()))
+            Text(message.timestamp.toAppleDate().formatted(.dateTime.day().month().year().hour().minute()))
                 .font(.caption)
         }
         .frame(maxWidth: .infinity, alignment: message.isReceived ? .leading : .trailing)

@@ -22,12 +22,13 @@ struct SettingsMenu: View {
         NavigationView {
             VStack{
                 if let user = userRepo.user {
-                    VStack{
+                    VStack{                        
                         Image(uiImage: user.profilePicture)
                             .resizable()
-                            .scaledToFit()
-                            .frame(width: 70, height: 70)
-                            .padding()
+                            .clipShape(Circle())
+                            .scaledToFill()
+                            .frame(width: 80, height: 80)
+                            .padding(5)
                             .background(.green)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(.green, lineWidth: 3))
@@ -67,7 +68,6 @@ struct SettingsMenu: View {
                     }
                     
                     
-                    
                     Button {
                         showSignOutAlert.toggle()
                     } label: {
@@ -97,13 +97,16 @@ struct SettingsMenu: View {
             }
             .sheet(isPresented: $showSheet){
                 //TODO: FIND A WAY TO RESCALE IMAGES IN ORDER TO FILL IN THE IMAGEHOLDER
-                ImagePicker(fromCameraBool: $pickFromCamera) { image in
-                    //TODO: REPLACE USERID BY ACTUAL UID
-                    userRepo.setNewProfilePicture(
-                        uiImage: image ?? UIImage(systemName: "person.fill")!){
-                            success in
-                            // TODO: INSERT CODE HERE
-                        }
+                ImagePicker(fromCameraBool: $pickFromCamera) { imageURL in
+                    if let imageURL = imageURL {
+                        userRepo.setNewProfilePicture(
+                            imageURL: imageURL){
+                                success in
+                                // WE RELOAD THE FETCHED USER TO GET THE UPDATED PROFILE PICTURE
+                                userRepo.getCurrentUser()
+                            }
+                    }
+
                 }
             }
         }

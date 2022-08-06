@@ -7,10 +7,14 @@
 
 import Foundation
 
+//TODO: ADD COMPLETIONHANDLER FOR GET
 protocol ConversationsRepository: ObservableObject {    
     func getConversations()
     
-    func addConversation(qrID: (String, String), _ completionHandler: @escaping (Bool) -> Void)
+    func addConversation(qrID: (String, String), location: Location, _ completionHandler: @escaping (Bool) -> Void)
     
     func removeConversation(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void)
+    
+    func resetConversations()
+
 }

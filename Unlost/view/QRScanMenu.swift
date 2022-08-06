@@ -10,7 +10,7 @@ import SwiftUI
 
 struct QRScanMenu: View {
     @Environment (\.presentationMode) var presentationMode
-    @EnvironmentObject var convRepo: LocalConversationsRepository
+    @EnvironmentObject var convRepo: FIRConversationsRepository
     
     @State private var qrText = ""
     @State private var isValid = false
@@ -73,7 +73,8 @@ struct QRScanMenu: View {
                                     showLocationErrorAlert.toggle()
                                 } else {
                                     convRepo.addConversation(
-                                        qrID: (String(splittedQrText[0]), String(splittedQrText[1]))
+                                        qrID: (String(splittedQrText[0]), String(splittedQrText[1])),
+                                        location: locationService.lastLocation!
                                     ) { isSuccess in
                                         showProgressView = false
                                         showSuccessAlert = isSuccess
@@ -98,7 +99,6 @@ struct QRScanMenu: View {
                             .alert("Error: the QR code doesn't belong to a valid item, or you already notified the user for this item.", isPresented: $showProcessingErrorAlert){
                                 Button("OK", role: .cancel){}
                             }
-                            
                         }
                     }
                     
@@ -143,6 +143,6 @@ struct QRScanMenu: View {
 struct QRScanMenu_Previews: PreviewProvider {
     static var previews: some View {
         QRScanMenu()
-            .environmentObject(LocalConversationsRepository())
+            .environmentObject(FIRConversationsRepository())
     }
 }

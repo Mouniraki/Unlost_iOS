@@ -72,7 +72,7 @@ struct AudioMessageLayout: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .frame(maxWidth: 300, alignment: message.isReceived ? .leading : .trailing)
 
-            Text(message.timestamp.formatted(.dateTime.day().month().year().hour().minute()))
+            Text(message.timestamp.toAppleDate().formatted(.dateTime.day().month().year().hour().minute()))
                 .font(.caption)
         }
         .onAppear {

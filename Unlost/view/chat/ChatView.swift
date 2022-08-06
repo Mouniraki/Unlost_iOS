@@ -12,7 +12,8 @@ import Combine
 
 //TODO: FIND A WAY TO HIDE THE TABVIEW BAR AT THE BOTTOM
 struct ChatView: View {
-    @EnvironmentObject var messagesRepo: LocalMessagesRepository
+    @EnvironmentObject var signInRepo: GoogleSignInRepo
+    @EnvironmentObject var messagesRepo: FIRMessagesRepository
     
     let conversation: Conversation
     
@@ -82,11 +83,11 @@ struct ChatView: View {
                                     message: LocationMessage(
                                         id: "MESSAGE\(messagesRepo.messages.count + 1)",
                                         isReceived: false,
-                                        timestamp: Date.now,
+                                        timestamp: DateTime.fromAppleDate(from: Date.now),
                                         coordinates: locationService.lastLocation!)
                                 ){
                                     success in
-                                    // TODO: INSERT CODE HERE
+                                    //TODO: IMPLEMENT
                                 }
                             }
                         } label: {
@@ -103,7 +104,7 @@ struct ChatView: View {
                     // Button to cancel recording
                     Button {
                         // WILDCARD HERE ONLY TO SILENCE WARNING MESSAGE
-                        _ = audioRecorder.recordAudioMessage(isRecording: isRecording, requestForCancellation: true)
+                        _ = audioRecorder.recordAudioMessage(userID: signInRepo.signedInUserID!, convID: conversation.id, isRecording: isRecording, requestForCancellation: true)
                         
                         isRecording.toggle()
                     } label: {
@@ -132,7 +133,7 @@ struct ChatView: View {
                 if messageStr.isEmpty {
                     // Button to start/stop recording & send it
                     Button {
-                        let audioPath = audioRecorder.recordAudioMessage(isRecording: isRecording, requestForCancellation: false)
+                        let audioPath = audioRecorder.recordAudioMessage(userID: signInRepo.signedInUserID!, convID: conversation.id, isRecording: isRecording, requestForCancellation: false)
                         
                         print(audioPath?.description ?? "No file recorded")
                         isRecording.toggle()
@@ -142,10 +143,11 @@ struct ChatView: View {
                                 convID: conversation.id,
                                 message: AudioMessage(id: "MESSAGE\(messagesRepo.messages.count + 1)",
                                                      isReceived: false,
-                                                     timestamp: Date.now,
+                                                      timestamp: DateTime.fromAppleDate(from: Date.now),
                                                       audioUrl: audioPath!)){
                                                           success in
-                                                          //TODO: INSERT CODE HERE
+                                                          print("AUDIO MESSAGE SUCCESS: \(success)")
+                                                          //TODO: IMPLEMENT
                                                       }
                         }
                     } label: {
@@ -169,10 +171,10 @@ struct ChatView: View {
                             message: TextMessage(
                                 id: "MESSAGE\(messagesRepo.messages.count + 1)",
                                 isReceived: false,
-                                timestamp: Date.now,
+                                timestamp: DateTime.fromAppleDate(from: Date.now),
                                 body: messageStr)){
                                     success in
-                                    // TODO: INSERT CODE HERE
+                                    //TODO: IMPLEMENT
                                 }
                         
                         messageStr = ""
@@ -195,16 +197,17 @@ struct ChatView: View {
             messagesRepo.getMessages(convID: conversation.id)
         }
         .sheet(isPresented: $showSheet){
-            ImagePicker(fromCameraBool: $pickFromCamera){ image in
+            ImagePicker(fromCameraBool: $pickFromCamera){ imageURL in
                 messagesRepo.sendMessage(
                     convID: conversation.id,
                     message: PicMessage(
                         id: "MESSAGE\(messagesRepo.messages.count + 1)",
                         isReceived: false,
-                        timestamp: Date.now,
-                        image: image ?? UIImage())){
+                        timestamp: DateTime.fromAppleDate(from: Date.now),
+                        imageURL: imageURL!)){
                             success in
-                            //TODO: INSERT CODE HERE
+                            //TODO: IMPLEMENT
+                            print("PIC MESSAGE SUCCESS: \(success)")
                         }
             }
         }
@@ -231,6 +234,7 @@ struct ChatView: View {
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         ChatView(conversation: Conversation.example)
-            .environmentObject(LocalMessagesRepository())
+            .environmentObject(FIRMessagesRepository())
+            .environmentObject(GoogleSignInRepo())
     }
 }

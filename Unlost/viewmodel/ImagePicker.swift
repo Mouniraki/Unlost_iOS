@@ -10,7 +10,7 @@ import SwiftUI
 struct ImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) private var presentationMode
     @Binding var fromCameraBool: Bool
-    let completionHandler: (UIImage?) -> Void
+    let completionHandler: (URL?) -> Void
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -37,8 +37,8 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                parent.completionHandler(image)
+            if let imageURL = info[UIImagePickerController.InfoKey.imageURL] as? URL {
+                parent.completionHandler(imageURL)
             }
             
             parent.presentationMode.wrappedValue.dismiss()

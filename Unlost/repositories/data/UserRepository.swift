@@ -8,8 +8,13 @@
 import Foundation
 import UIKit
 
+//TODO: ADD COMPLETIONHANDLER FOR GET
 protocol UserRepository: ObservableObject {
+    func getCurrentUser()
+    
     func getUser(userID: String?, _ completionHandler: @escaping (User?) -> Void)
     
-    func setNewProfilePicture(uiImage: UIImage, _ completionHandler: @escaping (Bool) -> Void)
+    func setNewProfilePicture(imageURL: URL, _ completionHandler: @escaping (Bool) -> Void)
+    
+    func resetUser()
 }

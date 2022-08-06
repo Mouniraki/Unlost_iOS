@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 
 enum ItemType: Int, CaseIterable, CustomStringConvertible {
-    case Wallet, Phone, Keys, Headphones
+    case Wallet, Headphones, Keys, Phone
     
     var description: String {
         switch self {

@@ -14,11 +14,11 @@ struct PicMessageLayout: View {
         VStack(alignment: message.isReceived ? .leading : .trailing){
             HStack{
                 NavigationLink(
-                    destination: Image(uiImage: message.image)
+                    destination: Image(uiImage: loadImage(imgUrl: message.imageURL))
                         .resizable()
                         .scaledToFit()
                 ){
-                    Image(uiImage: message.image)
+                    Image(uiImage: loadImage(imgUrl: message.imageURL))
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200)
@@ -32,7 +32,7 @@ struct PicMessageLayout: View {
             }
             .frame(maxWidth: 300, alignment: message.isReceived ? .leading : .trailing)
             
-            Text(message.timestamp.formatted(.dateTime.day().month().year().hour().minute()))
+            Text(message.timestamp.toAppleDate().formatted(.dateTime.day().month().year().hour().minute()))
                 .font(.caption)
         }
         .frame(maxWidth: .infinity, alignment: message.isReceived ? .leading : .trailing)
@@ -46,5 +46,13 @@ struct PicMessageLayout_Previews: PreviewProvider {
     static var previews: some View {
         PicMessageLayout(
             message: PicMessage.example)
+    }
+}
+
+private func loadImage(imgUrl: URL) -> UIImage {
+    if let imgData = try? Data(contentsOf: imgUrl), let loaded = UIImage(data: imgData) {
+        return loaded
+    } else {
+        return UIImage()
     }
 }

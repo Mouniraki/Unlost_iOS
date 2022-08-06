@@ -11,12 +11,12 @@ import GoogleSignIn
 
 // Configuration for Firebase setup
 class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
+    func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
+        FirebaseApp.configure()
 
-    return true
-  }
+        return true
+    }
     
     @available(iOS 9.0, *)
     func application(_ application: UIApplication, open url: URL,
@@ -31,9 +31,9 @@ struct UnlostApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    @StateObject var messagesRepo = LocalMessagesRepository()
+    @StateObject var messagesRepo = FIRMessagesRepository()
     @StateObject var itemsRepo = FIRItemsRepository()
-    @StateObject var conversationsRepo = LocalConversationsRepository()
+    @StateObject var conversationsRepo = FIRConversationsRepository()
     @StateObject var userRepo = FIRUserRepository()
     @StateObject var signInRepo = GoogleSignInRepo()
     

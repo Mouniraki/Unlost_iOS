@@ -11,15 +11,22 @@ final class AudioMessage: Message {
     //TODO: ADD AUDIO ATTRIBUTE
     let audioUrl: URL
     
-    init(id: String, isReceived: Bool, timestamp: Date, audioUrl: URL) {
+    init(id: String, isReceived: Bool, timestamp: DateTime, audioUrl: URL) {
         self.audioUrl = audioUrl
         super.init(id: id, isReceived: isReceived, timestamp: timestamp)
+    }
+    
+    static func fromMessage(message: Message, audioUrl: URL) -> AudioMessage {
+        return AudioMessage(id: message.id,
+                            isReceived: message.isReceived,
+                            timestamp: message.timestamp,
+                            audioUrl: audioUrl)
     }
     
     #if DEBUG
     static let example = AudioMessage(id: "ID",
                                      isReceived: false,
-                                     timestamp: Date.now,
-                                      audioUrl: Bundle.main.url(forResource: "Tada-sound", withExtension: ".mp3")!)
+                                     timestamp: DateTime.fromAppleDate(from: Date.now),
+                                     audioUrl: Bundle.main.url(forResource: "Tada-sound", withExtension: ".mp3")!)
     #endif
 }

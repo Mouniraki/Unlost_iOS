@@ -37,12 +37,16 @@ class AudioRecorder: ObservableObject {
     }
     
     // Performs audio recording
-    func recordAudioMessage(isRecording: Bool, requestForCancellation: Bool) -> URL? {
+    func recordAudioMessage(userID: String, convID: String, isRecording: Bool, requestForCancellation: Bool) -> URL? {
         do {
             if !isRecording {
                 // Records audio inside the Documents folder (name contains full date to distinguish between multiple audio messages)
                 let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let filename = url.appendingPathComponent("VOICE_MESSAGE\(Date.now.description).m4a")
+                if (try? FileManager.default.createDirectory(at: url.appendingPathComponent("conversations_assets/\(convID)"),
+                                                             withIntermediateDirectories: true)) == nil {
+                    return nil
+                }
+                let filename = url.appendingPathComponent("conversations_assets/\(convID)/AUDIO_\(userID)_\(Int(Date.now.timeIntervalSince1970)).m4a")
                 
                 // If no recording is occurring when we request to record => start a new recording
                 let settings = [
@@ -71,7 +75,7 @@ class AudioRecorder: ObservableObject {
             
         } catch {
             // In case of error => print the error message (DEBUG ONLY)
-            print(error.localizedDescription)
+            print("ERROR WHILE RECORDING: \(error.localizedDescription)")
             return nil
         }
     }

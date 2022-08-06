@@ -13,10 +13,6 @@ final class LocalConversationsRepository: ConversationsRepository {
     
     @Published private(set) var conversations: [Conversation] = []
     
-    init() {
-        getConversations()
-    }
-    
     func getConversations() {
         self.conversations = [
             Conversation(
@@ -55,7 +51,7 @@ final class LocalConversationsRepository: ConversationsRepository {
 //        completionHandler(true)
     }
     
-    func addConversation(qrID: (String, String), _ completionHandler: @escaping (Bool) -> Void) {
+    func addConversation(qrID: (String, String), location: Location, _ completionHandler: @escaping (Bool) -> Void) {
         if let id = signedInUserID {
             let conversation = Conversation(id: id + qrID.0,
                                             user: User(id: qrID.0,
@@ -79,6 +75,10 @@ final class LocalConversationsRepository: ConversationsRepository {
     func removeConversation(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void) {
         self.conversations.remove(atOffsets: offsets)
         completionHandler(true)
+    }
+    
+    func resetConversations() {
+        self.conversations = []
     }
     
     

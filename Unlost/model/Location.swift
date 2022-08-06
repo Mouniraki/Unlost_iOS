@@ -27,7 +27,7 @@ class Location: Equatable {
         return Location(latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
     
-    static func fromGeopoint(from: GeoPoint?) -> Location? {
+    static func fromFIRGeopoint(from: GeoPoint?) -> Location? {
         if let loc = from {
             return Location(latitude: loc.latitude, longitude: loc.longitude)
         } else {
@@ -37,5 +37,9 @@ class Location: Equatable {
     
     func toCLLocation() -> CLLocation {
         return CLLocation(latitude: self.latitude, longitude: self.longitude)
+    }
+    
+    func toFIRGeopoint() -> GeoPoint {
+        return GeoPoint(latitude: self.latitude, longitude: self.longitude)
     }
 }

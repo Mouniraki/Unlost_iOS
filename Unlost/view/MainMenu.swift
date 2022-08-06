@@ -10,10 +10,18 @@ import CoreLocation
 
 struct MainMenu: View {
     @EnvironmentObject var signInRepo: GoogleSignInRepo
+    @EnvironmentObject var userRepo: FIRUserRepository
+    @EnvironmentObject var convRepo: FIRConversationsRepository
+    @EnvironmentObject var itemsRepo: FIRItemsRepository
     
     var body: some View {        
         if !signInRepo.isSignedIn {
             SignInMenu()
+                .onAppear{
+                    userRepo.resetUser()
+                    itemsRepo.resetItems()
+                    convRepo.resetConversations()
+                }
         } else {
             TabView {
                 ItemsMenu()
@@ -31,6 +39,11 @@ struct MainMenu: View {
                         Label("My Chats", systemImage: "message")
                     }
                 }
+                .onAppear{
+                    userRepo.getCurrentUser()
+                    convRepo.getConversations()
+                    itemsRepo.getItems()
+                }
             }
         }
 }
@@ -39,7 +52,8 @@ struct MainMenu_Previews: PreviewProvider {
     static var previews: some View {
         MainMenu()
             .environmentObject(FIRItemsRepository())
-            .environmentObject(LocalConversationsRepository())
+            .environmentObject(FIRUserRepository())
+            .environmentObject(FIRConversationsRepository())
             .environmentObject(GoogleSignInRepo())
     }
 }

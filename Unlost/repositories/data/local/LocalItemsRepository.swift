@@ -12,10 +12,6 @@ final class LocalItemsRepository: ItemsRepository {
     
     @Published private(set) var items: [Item] = []
     
-    init() {
-        getItems()
-    }
-    
     func getItems() {
         self.items = [
             Item(id: "MOUNIRITEM1",
@@ -62,6 +58,19 @@ final class LocalItemsRepository: ItemsRepository {
 //        completionHandler(true)
     }
     
+    func getItem(userID: String, itemID: String, _ completionHandler: @escaping (Item?) -> Void) {
+        completionHandler(Item(id: itemID,
+             name: "Wallet",
+             description: "With all my belongings",
+             type: .Wallet,
+             lastLocation: Location(
+                latitude: 51.507222,
+                longitude: -0.1275
+             ),
+             isLost: false)
+        )
+    }
+    
     func addItem(item: Item, _ completionHandler: @escaping (Bool) -> Void) {
         self.items.append(item)
         completionHandler(true)
@@ -70,6 +79,10 @@ final class LocalItemsRepository: ItemsRepository {
     func removeItem(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void) {
         self.items.remove(atOffsets: offsets)
         completionHandler(true)
+    }
+    
+    func resetItems() {
+        self.items = []
     }
     
     

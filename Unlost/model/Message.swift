@@ -10,9 +10,9 @@ import Foundation
 class Message: Identifiable {
     var id: String
     var isReceived: Bool
-    var timestamp: Date
+    var timestamp: DateTime
     
-    init(id: String, isReceived: Bool, timestamp: Date){
+    init(id: String, isReceived: Bool, timestamp: DateTime){
         self.id = id
         self.isReceived = isReceived
         self.timestamp = timestamp

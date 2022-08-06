@@ -9,7 +9,7 @@ import SwiftUI
 import CoreLocation
 
 struct ChatMenu: View {
-    @EnvironmentObject var conversationsRepo: LocalConversationsRepository
+    @EnvironmentObject var conversationsRepo: FIRConversationsRepository
     
     @State private var showSettingsSheet = false
     @State private var showQrScanSheet = false
@@ -55,6 +55,7 @@ struct ChatMenu: View {
                     }
                 }
             }
+            
             .sheet(isPresented: $showSettingsSheet) {
                 SettingsMenu()
             }
@@ -68,6 +69,6 @@ struct ChatMenu: View {
 struct ChatMenu_Previews: PreviewProvider {
     static var previews: some View {
         ChatMenu()
-            .environmentObject(LocalConversationsRepository())
+            .environmentObject(FIRConversationsRepository())
     }
 }

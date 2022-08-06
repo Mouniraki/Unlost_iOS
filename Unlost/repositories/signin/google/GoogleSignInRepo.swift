@@ -11,6 +11,7 @@ import GoogleSignIn
 
 final class GoogleSignInRepo: SignInRepository {
     @Published var isSignedIn = false
+    @Published private(set) var signedInUserID: String? = nil
     
     func signIn(_ completionHandler: @escaping (Bool) -> Void) {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
@@ -55,10 +56,24 @@ final class GoogleSignInRepo: SignInRepository {
                     return
                 }
                 
-                print(user)
-                completionHandler(true)
-                self.isSignedIn = true
+                // IF USER ISNT PRESENT IN FIRESTORE => ADD A NEW ENTRY
+                let db = Firestore.firestore().collection("Users").document(user.uid)
                 
+                db.getDocument { snapshot, error in
+                    guard snapshot != nil else {
+                        let userDict: [String: Any] = [
+                            "first_name": user.displayName!, //TODO: FIND HOW TO SPLIT FIRSTNAME & LASTNAME
+                            "last_name": user.displayName!
+                        ]
+                            
+                        db.setData(userDict)
+                        return
+                    }
+                }
+                
+                self.isSignedIn = Auth.auth().currentUser?.uid != nil
+                self.signedInUserID = Auth.auth().currentUser?.uid
+                completionHandler(true)
             }
         }
     }
@@ -67,7 +82,8 @@ final class GoogleSignInRepo: SignInRepository {
         do {
             try Auth.auth().signOut()
             GIDSignIn.sharedInstance.signOut()
-            self.isSignedIn = false
+            self.isSignedIn = Auth.auth().currentUser?.uid != nil // MUST BE FALSE, SINCE WE SIGNED OUT
+            self.signedInUserID = Auth.auth().currentUser?.uid
             completionHandler(true)
         } catch {
             print(error.localizedDescription)

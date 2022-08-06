@@ -12,9 +12,16 @@ import MapKit
 final class LocationMessage: Message {
     var coordinates: Location
     
-    init(id: String, isReceived: Bool, timestamp: Date, coordinates: Location){
+    init(id: String, isReceived: Bool, timestamp: DateTime, coordinates: Location){
         self.coordinates = coordinates
         super.init(id: id, isReceived: isReceived, timestamp: timestamp)
+    }
+    
+    static func fromMessage(message: Message, location: Location) -> LocationMessage {
+        return LocationMessage(id: message.id,
+                               isReceived: message.isReceived,
+                               timestamp: message.timestamp,
+                               coordinates: location)
     }
     
     //TODO: FIND A WAY TO PUT AN ANNOTATION IN THE SNAPSHOT
@@ -44,7 +51,7 @@ final class LocationMessage: Message {
     #if DEBUG
     static let example = LocationMessage(id: "ID",
                                          isReceived: false,
-                                         timestamp: Date.now,
+                                         timestamp: DateTime.fromAppleDate(from: Date.now),
                                          coordinates: Location(latitude: 12.39819, longitude: 4.29281))
     #endif
 }
