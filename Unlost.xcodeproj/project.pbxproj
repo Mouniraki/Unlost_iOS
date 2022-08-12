@@ -61,6 +61,9 @@
 		E162B7A628814F4800924626 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7A528814F4800924626 /* QRCodeView.swift */; };
 		E162B7AA2881BF7B00924626 /* AudioMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7A92881BF7B00924626 /* AudioMessage.swift */; };
 		E162B7AC2881C27200924626 /* AudioMessageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E162B7AB2881C27200924626 /* AudioMessageLayout.swift */; };
+		E163D6D92897DE0200E64838 /* FIRConversationsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E163D6D82897DE0200E64838 /* FIRConversationsRepository.swift */; };
+		E163D6DB28981BA100E64838 /* FIRMessagesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E163D6DA28981BA100E64838 /* FIRMessagesRepository.swift */; };
+		E163D6DD289914E600E64838 /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E163D6DC289914E600E64838 /* DateTime.swift */; };
 		E1696921287C12E300BF5BA9 /* UnlostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1696920287C12E300BF5BA9 /* UnlostApp.swift */; };
 		E1696923287C12E300BF5BA9 /* ItemsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1696922287C12E300BF5BA9 /* ItemsMenu.swift */; };
 		E1696925287C12E600BF5BA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1696924287C12E600BF5BA9 /* Assets.xcassets */; };
@@ -70,6 +73,7 @@
 		E169693E287C12E600BF5BA9 /* UnlostUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169693D287C12E600BF5BA9 /* UnlostUITestsLaunchTests.swift */; };
 		E169694B287C13C900BF5BA9 /* ItemLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169694A287C13C900BF5BA9 /* ItemLayout.swift */; };
 		E16ED750287F337E000E87D2 /* ItemMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16ED74F287F337E000E87D2 /* ItemMapView.swift */; };
+		E173E15C289C7AFA003B5D95 /* picimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E173E15B289C7AFA003B5D95 /* picimage.jpg */; };
 		E1AD42AE287F02B900DB7416 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = E1AD42AD287F02B900DB7416 /* CodeScanner */; };
 		E1AD42B0287F02D600DB7416 /* QRScanMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AD42AF287F02D600DB7416 /* QRScanMenu.swift */; };
 		E1B2EABF287C16AD007B650C /* ChatMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2EABE287C16AD007B650C /* ChatMenu.swift */; };
@@ -137,6 +141,9 @@
 		E162B7A528814F4800924626 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		E162B7A92881BF7B00924626 /* AudioMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessage.swift; sourceTree = "<group>"; };
 		E162B7AB2881C27200924626 /* AudioMessageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessageLayout.swift; sourceTree = "<group>"; };
+		E163D6D82897DE0200E64838 /* FIRConversationsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIRConversationsRepository.swift; sourceTree = "<group>"; };
+		E163D6DA28981BA100E64838 /* FIRMessagesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIRMessagesRepository.swift; sourceTree = "<group>"; };
+		E163D6DC289914E600E64838 /* DateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		E169691D287C12E300BF5BA9 /* Unlost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unlost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1696920287C12E300BF5BA9 /* UnlostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlostApp.swift; sourceTree = "<group>"; };
 		E1696922287C12E300BF5BA9 /* ItemsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsMenu.swift; sourceTree = "<group>"; };
@@ -149,6 +156,7 @@
 		E169693D287C12E600BF5BA9 /* UnlostUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlostUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E169694A287C13C900BF5BA9 /* ItemLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemLayout.swift; sourceTree = "<group>"; };
 		E16ED74F287F337E000E87D2 /* ItemMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMapView.swift; sourceTree = "<group>"; };
+		E173E15B289C7AFA003B5D95 /* picimage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = picimage.jpg; sourceTree = "<group>"; };
 		E1AD42AF287F02D600DB7416 /* QRScanMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanMenu.swift; sourceTree = "<group>"; };
 		E1B2EABE287C16AD007B650C /* ChatMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenu.swift; sourceTree = "<group>"; };
 		E1B2EAC0287C177C007B650C /* ChatEntryLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEntryLayout.swift; sourceTree = "<group>"; };
@@ -276,12 +284,13 @@
 			path = google;
 			sourceTree = "<group>";
 		};
-		E15E16E5288488BA009F7208 /* Sounds */ = {
+		E15E16E5288488BA009F7208 /* LocalTempFiles */ = {
 			isa = PBXGroup;
 			children = (
+				E173E15B289C7AFA003B5D95 /* picimage.jpg */,
 				E15E16E6288488D8009F7208 /* Tada-sound.mp3 */,
 			);
-			path = Sounds;
+			path = LocalTempFiles;
 			sourceTree = "<group>";
 		};
 		E162B7A22880BC3200924626 /* repositories */ = {
@@ -318,7 +327,7 @@
 		E169691F287C12E300BF5BA9 /* Unlost */ = {
 			isa = PBXGroup;
 			children = (
-				E15E16E5288488BA009F7208 /* Sounds */,
+				E15E16E5288488BA009F7208 /* LocalTempFiles */,
 				E162B7A22880BC3200924626 /* repositories */,
 				E10C91A8287D64A600CC062F /* viewmodel */,
 				E1B2EACD287CD2B0007B650C /* view */,
@@ -364,6 +373,7 @@
 				E10C91B5287DA56200CC062F /* Conversation.swift */,
 				E10C91B7287DA8C300CC062F /* User.swift */,
 				E1EC649F2885864700E2E8C6 /* Location.swift */,
+				E163D6DC289914E600E64838 /* DateTime.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -372,15 +382,10 @@
 			isa = PBXGroup;
 			children = (
 				E1B2EAC6287CC1EF007B650C /* MainMenu.swift */,
+				E1E6C24A28A6FBB6006E6DF9 /* menus */,
 				E1B2EAD1287CD319007B650C /* map */,
 				E1B2EACF287CD2EB007B650C /* chat */,
 				E1B2EACE287CD2D1007B650C /* items */,
-				E10C91AE287D7D0C00CC062F /* SettingsMenu.swift */,
-				E1AD42AF287F02D600DB7416 /* QRScanMenu.swift */,
-				E1EC64A52885F17300E2E8C6 /* SignInMenu.swift */,
-				E1696922287C12E300BF5BA9 /* ItemsMenu.swift */,
-				E1B2EABE287C16AD007B650C /* ChatMenu.swift */,
-				E1B2EAC4287CBE5B007B650C /* MapMenu.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -416,6 +421,19 @@
 			path = map;
 			sourceTree = "<group>";
 		};
+		E1E6C24A28A6FBB6006E6DF9 /* menus */ = {
+			isa = PBXGroup;
+			children = (
+				E10C91AE287D7D0C00CC062F /* SettingsMenu.swift */,
+				E1AD42AF287F02D600DB7416 /* QRScanMenu.swift */,
+				E1EC64A52885F17300E2E8C6 /* SignInMenu.swift */,
+				E1696922287C12E300BF5BA9 /* ItemsMenu.swift */,
+				E1B2EABE287C16AD007B650C /* ChatMenu.swift */,
+				E1B2EAC4287CBE5B007B650C /* MapMenu.swift */,
+			);
+			path = menus;
+			sourceTree = "<group>";
+		};
 		E1EC64A92886814200E2E8C6 /* local */ = {
 			isa = PBXGroup;
 			children = (
@@ -432,6 +450,8 @@
 			children = (
 				E150C751289724C1006B21E4 /* FIRItemsRepository.swift */,
 				E150C7532897451C006B21E4 /* FIRUserRepository.swift */,
+				E163D6D82897DE0200E64838 /* FIRConversationsRepository.swift */,
+				E163D6DA28981BA100E64838 /* FIRMessagesRepository.swift */,
 			);
 			path = firebase;
 			sourceTree = "<group>";
@@ -604,6 +624,7 @@
 				E150C74A28966FD6006B21E4 /* credentials.plist in Resources */,
 				E150C74B28966FD6006B21E4 /* GoogleService-Info.plist in Resources */,
 				E15E16E7288488D8009F7208 /* Tada-sound.mp3 in Resources */,
+				E173E15C289C7AFA003B5D95 /* picimage.jpg in Resources */,
 				E1696925287C12E600BF5BA9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -656,6 +677,7 @@
 				E1EC64B42886CFC200E2E8C6 /* UserRepository.swift in Sources */,
 				E13C3AD028800FC300A88806 /* ChatMapView.swift in Sources */,
 				E162B7AA2881BF7B00924626 /* AudioMessage.swift in Sources */,
+				E163D6DB28981BA100E64838 /* FIRMessagesRepository.swift in Sources */,
 				E1AD42B0287F02D600DB7416 /* QRScanMenu.swift in Sources */,
 				E1B2EABF287C16AD007B650C /* ChatMenu.swift in Sources */,
 				E10C91C5287DE54500CC062F /* AudioRecorder.swift in Sources */,
@@ -665,10 +687,12 @@
 				E1B2EAD3287CD383007B650C /* AddItemView.swift in Sources */,
 				E10C91BE287DDAEC00CC062F /* PicMessageLayout.swift in Sources */,
 				E10C91B3287D99D900CC062F /* Message.swift in Sources */,
+				E163D6D92897DE0200E64838 /* FIRConversationsRepository.swift in Sources */,
 				E1EC64AE2886CCAB00E2E8C6 /* MessagesRepository.swift in Sources */,
 				E13C3AD22880684800A88806 /* MapAnnotationLayout.swift in Sources */,
 				E150C74D2897071D006B21E4 /* GoogleSignInRepo.swift in Sources */,
 				E150C752289724C1006B21E4 /* FIRItemsRepository.swift in Sources */,
+				E163D6DD289914E600E64838 /* DateTime.swift in Sources */,
 				E13C3AD42880704F00A88806 /* ImagePicker.swift in Sources */,
 				E1EC64BC2886D59700E2E8C6 /* LocalConversationsRepository.swift in Sources */,
 				E1EC64B02886CDBE00E2E8C6 /* LocalMessagesRepository.swift in Sources */,
@@ -766,6 +790,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CODE_SIGN_FLAGS = "--generate-entitlement-der";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -819,6 +844,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_CODE_SIGN_FLAGS = "--generate-entitlement-der";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -831,6 +857,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Unlost/Preview Content\"";
@@ -853,11 +880,13 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_CODE_SIGN_FLAGS = "--generate-entitlement-der";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.unlostapp.Unlost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -866,6 +895,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Unlost/Preview Content\"";
@@ -888,11 +918,13 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_CODE_SIGN_FLAGS = "--generate-entitlement-der";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.unlostapp.Unlost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
