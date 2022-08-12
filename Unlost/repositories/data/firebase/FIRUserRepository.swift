@@ -16,64 +16,47 @@ final class FIRUserRepository: UserRepository {
     @Published private(set) var user: User? = nil
     
     func getCurrentUser() {
-        if let userID = Auth.auth().currentUser?.uid {
-            self.getUser(userID: userID) { user in
-                self.user = user
+        Task {
+            if let userID = Auth.auth().currentUser?.uid {
+                self.user = await getUser(userID: userID)
             }
         }
     }
     
-    func getUser(userID: String?, _ completionHandler: @escaping (User?) -> Void) {
-        if let user = userID {
-            db.collection("Users")
-                .document(user)
-                .getDocument { snapshot, error in
-                    guard let snapshot = snapshot else {
-                        print("Error fetching item snapshots: \(error!)")
-                        completionHandler(nil)
-                        return
-                    }
-                    
-                    let data = snapshot.data()
-                    
-                    if snapshot.exists {
-                        if data!["user_icon"] != nil {
-                            let gsReference = self.st.reference().child(data!["user_icon"] as! String)
-                            
-                            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                            let localFileURL = url.appendingPathComponent("\(user).jpg")
-                            
-                            gsReference.write(toFile: localFileURL) { url, error in
-                                if error != nil {
-                                    // PERFORM ACTIONS
-                                    print("Error while fetching user profile picture")
-                                } else {
-                                    completionHandler(
-                                        User(id: snapshot.documentID,
-                                            firstName: data!["first_name"] as! String,
-                                            lastName: data!["last_name"] as! String,
-                                            profilePicture: self.loadProfilePicture(imgUrl: url!))
-                                    )
-                                }
-                            }
-                        } else {
-                            completionHandler(
-                                User(id: snapshot.documentID,
+    @MainActor
+    func getUser(userID: String?) async -> User? {
+        do {
+            if let userID = userID {
+                let snapshot = try await db.collection("Users").document(userID).getDocument()
+                let data = snapshot.data()
+                if snapshot.exists {
+                    if data!["user_icon"] != nil {
+                        let gsReference = self.st.reference().child(data!["user_icon"] as! String)
+                        
+                        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                        let localFileURL = url.appendingPathComponent("\(userID).jpg")
+                        
+                        let profilePicURL = try await gsReference.writeAsync(toFile: localFileURL)  //try await gsReference.write(toFile: localFileURL)
+                        
+                        return User(id: snapshot.documentID,
+                                    firstName: data!["first_name"] as! String,
+                                    lastName: data!["last_name"] as! String,
+                                    profilePicture: self.loadProfilePicture(imgUrl: profilePicURL))
+                    } else {
+                        return User(id: snapshot.documentID,
                                     firstName: data!["first_name"] as! String,
                                     lastName: data!["last_name"] as! String,
                                     profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
-                            )
-                        }
-                    } else {
-                        // IF THE USER DOESN'T EXIST => MOST CERTAINLY AN ANONYMOUS USER
-                        completionHandler(
-                            User(id: UUID().uuidString,
-                                 firstName: "Anonymous",
-                                 lastName: "User",
-                                 profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
-                        )
                     }
+                } else {
+                    return nil
                 }
+            } else {
+                return nil
+            }
+        } catch {
+            print(error.localizedDescription)
+            return nil
         }
     }
     

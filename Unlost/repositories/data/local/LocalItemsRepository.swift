@@ -58,8 +58,8 @@ final class LocalItemsRepository: ItemsRepository {
 //        completionHandler(true)
     }
     
-    func getItem(userID: String, itemID: String, _ completionHandler: @escaping (Item?) -> Void) {
-        completionHandler(Item(id: itemID,
+    func getItem(userID: String, itemID: String) async -> Item? {
+        return Item(id: itemID,
              name: "Wallet",
              description: "With all my belongings",
              type: .Wallet,
@@ -68,7 +68,6 @@ final class LocalItemsRepository: ItemsRepository {
                 longitude: -0.1275
              ),
              isLost: false)
-        )
     }
     
     func addItem(item: Item, _ completionHandler: @escaping (Bool) -> Void) {

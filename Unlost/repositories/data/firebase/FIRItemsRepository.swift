@@ -38,28 +38,52 @@ final class FIRItemsRepository: ItemsRepository {
         }
     }
     
-    func getItem(userID: String, itemID: String, _ completionHandler: @escaping (Item?) -> Void) {
-        db.collection("Users")
-            .document(userID)
-            .collection("Items")
-            .document(itemID)
-            .getDocument { snapshot, error in
-                guard let snapshot = snapshot else {
-                    print("Error while fetching the requested item")
-                    completionHandler(nil)
-                    return
-                }
-                
-                let data = snapshot.data()
-                if let data = data {
-                    completionHandler(Item(id: snapshot.documentID,
-                                           name: data["item_name"] as! String,
-                                           description: data["item_description"] as! String,
-                                           type: ItemType.allCases[(data["item_type"] as! Int) % 4],
-                                           lastLocation: Location.fromFIRGeopoint(from: data["last_location"] as? GeoPoint ?? nil),
-                                           isLost: data["is_lost"] as! Bool))
-                }
+    @MainActor
+    func getItem(userID: String, itemID: String) async -> Item? {
+        do {
+            let snapshot = try await db.collection("Users")
+                .document(userID)
+                .collection("Items")
+                .document(itemID)
+                .getDocument()
+            
+            let data = snapshot.data()
+            if let data = data {
+                return Item(id: snapshot.documentID,
+                            name: data["item_name"] as! String,
+                            description: data["item_description"] as! String,
+                            type: ItemType.allCases[(data["item_type"] as! Int) % 4],
+                            lastLocation: Location.fromFIRGeopoint(from: data["last_location"] as? GeoPoint ?? nil),
+                            isLost: data["is_lost"] as! Bool)
+            } else {
+                return nil
             }
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+        
+//        db.collection("Users")
+//            .document(userID)
+//            .collection("Items")
+//            .document(itemID)
+//            .getDocument { snapshot, error in
+//                guard let snapshot = snapshot else {
+//                    print("Error while fetching the requested item")
+//                    completionHandler(nil)
+//                    return
+//                }
+//
+//                let data = snapshot.data()
+//                if let data = data {
+//                    completionHandler(Item(id: snapshot.documentID,
+//                                           name: data["item_name"] as! String,
+//                                           description: data["item_description"] as! String,
+//                                           type: ItemType.allCases[(data["item_type"] as! Int) % 4],
+//                                           lastLocation: Location.fromFIRGeopoint(from: data["last_location"] as? GeoPoint ?? nil),
+//                                           isLost: data["is_lost"] as! Bool))
+//                }
+//            }
     }
     
     func addItem(item: Item, _ completionHandler: @escaping (Bool) -> Void) {

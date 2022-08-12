@@ -13,63 +13,58 @@ final class FIRConversationsRepository: ConversationsRepository {
     
     @Published private(set) var conversations: [Conversation] = []
     
+    //TODO: REWRITE FUNCTION TO AVOID RELOADING BUGS
     func getConversations() {
-        self.resetConversations()
-        
         if let userID = Auth.auth().currentUser?.uid {
-            db.collection("Users")
+            self.db.collection("Users")
                 .document(userID)
                 .collection("Conv_Refs")
                 .addSnapshotListener { snapshot, error in
                     guard let snapshot = snapshot else {
-                        print("Error while fetching conversation references")
+                        print("ERROR: unable to retrieve conversation references")
                         return
                     }
                     
-                    for convref in snapshot.documents {
-                        self.db.collection("Conversations")
-                            .document(convref.documentID)
-                            .getDocument { conversation, error in
-                                guard let conversation = conversation else {
-                                    print("Error while fetching conversation")
-                                    return
-                                }
-                                
+                    Task {
+                        do {
+                            //TODO: TRY TO USE MAP INSTEAD OF A FOR-LOOP HERE
+                            var list: [Conversation] = []
+                            for convref in snapshot.documents {
+                                let conversation = try await self.db.collection("Conversations").document(convref.documentID).getDocument()
                                 let data = conversation.data()
                                 // EACH CONVERSATION ID IS THE CONCATENATION OF BOTH THE CURRENT USERID & THE INTERLOCUTOR ID
                                 let convIDPrefix = conversation.documentID.prefix(userID.count)
                                 let interlocutorID = String(convIDPrefix == userID ? conversation.documentID.suffix(userID.count) : convIDPrefix)
+                                let user = await FIRUserRepository().getUser(userID: interlocutorID)
                                 
-                                FIRUserRepository().getUser(userID: interlocutorID) { user in
-                                    if let convUser = user {
-                                        // EACH ITEM ID CONTAINS THE USER ID & ITEM ID SEPARATED BY A ":"
-                                        let itemID = (data!["lost_item_id"] as! String).split(separator: ":")
-                                        let isMyItem = itemID[0] == userID
-                                        
-                                        FIRItemsRepository().getItem(userID: String(itemID[0]), itemID: String(itemID[1])){ item in
-                                            if let convItem = item {
-                                                self.conversations.append(
-                                                    Conversation(id: conversation.documentID,
-                                                                 user: convUser,
-                                                                 item: convItem,
-                                                                 isMyItem: isMyItem)
-                                                )
-                                            }
-                                        }
-                                    }
+                                let itemID = (data!["lost_item_id"] as! String).split(separator: ":")
+                                let isMyItem = itemID[0] == userID
+                                let item = await FIRItemsRepository().getItem(userID: String(itemID[0]), itemID: String(itemID[1]))
+                                
+                                if user != nil && item != nil {
+                                    list.append(
+                                        Conversation(id: convref.documentID,
+                                                     user: user!,
+                                                     item: item!,
+                                                     isMyItem: isMyItem)
+                                    )
                                 }
                             }
+                            self.conversations = list
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                     }
                 }
         }
     }
     
     //TODO: IMPLEMENT COMPLETION HANDLERS
-    //TODO: ENROLL TO APPLE DEVELOPER PROGRAM TO SOLVE ERRORS
+    //TODO: ENROLL TO APPLE DEVELOPER PROGRAM TO IMPLEMENT NOTIFICATIONS BEHAVIOR
     func addConversation(qrID: (String, String), location: Location, _ completionHandler: @escaping (Bool) -> Void) {
         
         let convDict: [String: Any] = [
-            "lost_item_id": qrID.0+":"+qrID.1 as String
+            "lost_item_id": qrID.0+":"+qrID.1
         ]
         
         if Auth.auth().currentUser == nil {
@@ -191,6 +186,8 @@ final class FIRConversationsRepository: ConversationsRepository {
                         }
                     }
             }
+        } else {
+            completionHandler(false)
         }
     }
     

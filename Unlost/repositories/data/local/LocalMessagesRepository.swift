@@ -61,8 +61,4 @@ final class LocalMessagesRepository: MessagesRepository {
         
         completionHandler(true)
     }
-    
-    func resetMessages() {
-        self.messages = []
-    }
 }

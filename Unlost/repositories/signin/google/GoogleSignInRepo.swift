@@ -10,8 +10,8 @@ import Firebase
 import GoogleSignIn
 
 final class GoogleSignInRepo: SignInRepository {
-    @Published var isSignedIn = false
-    @Published private(set) var signedInUserID: String? = nil
+    @Published var isSignedIn = Auth.auth().currentUser != nil
+    @Published private(set) var signedInUserID: String? = Auth.auth().currentUser?.uid
     
     func signIn(_ completionHandler: @escaping (Bool) -> Void) {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
@@ -63,7 +63,7 @@ final class GoogleSignInRepo: SignInRepository {
                     guard snapshot != nil else {
                         let userDict: [String: Any] = [
                             "first_name": user.displayName!, //TODO: FIND HOW TO SPLIT FIRSTNAME & LASTNAME
-                            "last_name": user.displayName!
+                            "last_name": ""
                         ]
                             
                         db.setData(userDict)

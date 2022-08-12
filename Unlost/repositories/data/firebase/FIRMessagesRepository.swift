@@ -23,8 +23,6 @@ final class FIRMessagesRepository: MessagesRepository {
                 .createDirectory(at: documentsPath.appendingPathComponent("conversations_assets/\(convID)"),
                                  withIntermediateDirectories: true)
             
-//            self.resetMessages()
-            
             db.collection("Conversations")
                 .document(convID)
                 .collection("Messages")
@@ -91,6 +89,7 @@ final class FIRMessagesRepository: MessagesRepository {
             
             if let locMsg = message as? LocationMessage {
                 messageDict["location"] = locMsg.coordinates.toFIRGeopoint()
+                self.sendMessageRoutine(convID: convID, data: messageDict, completionHandler)
                 
             } else if let picMsg = message as? PicMessage {
                 //TODO: MAYBE OFFLOAD THIS TO A SEPARATE METHOD
@@ -100,24 +99,27 @@ final class FIRMessagesRepository: MessagesRepository {
                     
                     // SAVE IMAGE TO LOCAL CACHE
                     let localStorage = self.documentsPath.appendingPathComponent(FIRstoragePath)
-                    guard (try? data.write(to: localStorage)) != nil else {
-                        // TODO: HANDLE ERRORS HERE
-                        print("ERROR: unable to write to local storage")
+                    if (try? data.write(to: localStorage)) != nil {
+                        
+                        let picReference = self.st.reference().child(FIRstoragePath)
+                        
+                        picReference.putData(data, metadata: nil) { metadata, error in
+                            guard error == nil else {
+                                print("ERROR: unable to upload image")
+                                completionHandler(false)
+                                return
+                            }
+                            
+                            messageDict["image_url"] = FIRstoragePath
+                            
+                            //SEND MESSAGE ONLY NOW
+                            self.sendMessageRoutine(convID: convID, data: messageDict, completionHandler)
+                            
+                        }
+                    } else {
                         completionHandler(false)
                         return
                     }
-                    
-                    let picReference = self.st.reference().child(FIRstoragePath)
-                    
-                    picReference.putData(data, metadata: nil) { metadata, error in
-                        guard error == nil else {
-                            print("ERROR: unable to upload image")
-                            completionHandler(false)
-                            return
-                        }
-                    }
-                    
-                    messageDict["image_url"] = FIRstoragePath
                 }
             } else if let audioMsg = message as? AudioMessage {
                 let FIRAudioPath = "conversations_assets/\(convID)/\(audioMsg.audioUrl.lastPathComponent)"
@@ -129,31 +131,33 @@ final class FIRMessagesRepository: MessagesRepository {
                         completionHandler(false)
                         return
                     }
+                    
+                    messageDict["audio_url"] = FIRAudioPath
+                    
+                    // SEND MESSAGE ONLY NOW
+                    self.sendMessageRoutine(convID: convID, data: messageDict, completionHandler)
+                    
                 }
-                
-                messageDict["audio_url"] = FIRAudioPath
             } else if let txtMsg = message as? TextMessage {
                 messageDict["body"] = txtMsg.body
+                self.sendMessageRoutine(convID: convID, data: messageDict, completionHandler)
             }
-            
-            self.db.collection("Conversations")
-                .document(convID)
-                .collection("Messages")
-                .addDocument(data: messageDict) { err in
-                    if err != nil {
-                        print("ERROR: unable to add this message to the conversation")
-                        completionHandler(false)
-                        return
-                    }
-                }
-            
-            completionHandler(true)
         }
     }
     
-    //TODO: FIGURE OUT IF THIS IS NEEDED OR NOT
-    func resetMessages() {
-        self.messages = []
+    private func sendMessageRoutine(convID: String, data: [String: Any], _ completionHandler: @escaping (Bool) -> Void) {
+        self.db.collection("Conversations")
+            .document(convID)
+            .collection("Messages")
+            .addDocument(data: data) { err in
+                if err != nil {
+                    print("ERROR: unable to add this message to the conversation")
+                    completionHandler(false)
+                    return
+                }
+            }
+        
+        completionHandler(true)
     }
     
     private func downloadFile(strURL: String, _ completionHandler: @escaping (Bool) -> Void) {

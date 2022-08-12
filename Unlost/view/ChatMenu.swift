@@ -10,6 +10,8 @@ import CoreLocation
 
 struct ChatMenu: View {
     @EnvironmentObject var conversationsRepo: FIRConversationsRepository
+    @EnvironmentObject var userRepo: FIRUserRepository
+    @EnvironmentObject var itemsRepo: FIRItemsRepository
     
     @State private var showSettingsSheet = false
     @State private var showQrScanSheet = false
@@ -70,5 +72,7 @@ struct ChatMenu_Previews: PreviewProvider {
     static var previews: some View {
         ChatMenu()
             .environmentObject(FIRConversationsRepository())
+            .environmentObject(FIRUserRepository())
+            .environmentObject(FIRItemsRepository())
     }
 }

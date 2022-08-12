@@ -11,7 +11,7 @@ import Foundation
 protocol ItemsRepository: ObservableObject {    
     func getItems()
     
-    func getItem(userID: String, itemID: String, _ completionHandler: @escaping (Item?) -> Void)
+    func getItem(userID: String, itemID: String) async -> Item?
     
     func addItem(item: Item, _ completionHandler: @escaping (Bool) -> Void)
     

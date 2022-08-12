@@ -20,13 +20,11 @@ final class LocalUserRepository: UserRepository {
                          profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
     }
     
-    func getUser(userID: String?, _ completionHandler: @escaping (User?) -> Void) {
-        completionHandler(
+    func getUser(userID: String?) async -> User? {
             User(id: "USER1",
                  firstName: "Mounir",
                  lastName: "Raki",
                  profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
-        )
     }
     
     func setNewProfilePicture(imageURL: URL, _ completionHandler: @escaping (Bool) -> Void) {

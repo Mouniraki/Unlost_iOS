@@ -17,4 +17,11 @@ struct User: Identifiable {
     func getFullUserName() -> String {
         return firstName + " " + lastName
     }
+    
+    #if DEBUG
+    static let example = User(id: "EXAMPLEUSERID",
+                              firstName: "Example",
+                              lastName: "User",
+                              profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
+    #endif
 }

@@ -218,6 +218,9 @@ struct ChatView: View {
             ToolbarItem(placement: .principal){
                 HStack {
                     Image(uiImage: conversation.user.profilePicture)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 30, height: 30)
                         .clipShape(Circle())
                     VStack(alignment: .leading){
                         Text(conversation.user.getFullUserName()).font(.headline)

@@ -40,6 +40,7 @@ struct MainMenu: View {
                     }
                 }
                 .onAppear{
+//                    signInRepo.signOut({ success in })
                     userRepo.getCurrentUser()
                     convRepo.getConversations()
                     itemsRepo.getItems()
