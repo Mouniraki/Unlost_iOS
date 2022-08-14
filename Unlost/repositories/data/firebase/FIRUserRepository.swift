@@ -8,8 +8,10 @@
 import Foundation
 import Firebase
 import FirebaseStorage
+import UIKit
 
 final class FIRUserRepository: UserRepository {
+    private let auth = Auth.auth()
     private let db = Firestore.firestore()
     private let st = Storage.storage()
 
@@ -17,7 +19,7 @@ final class FIRUserRepository: UserRepository {
     
     func getCurrentUser() {
         Task {
-            if let userID = Auth.auth().currentUser?.uid {
+            if let userID = auth.currentUser?.uid {
                 self.user = await getUser(userID: userID)
             }
         }

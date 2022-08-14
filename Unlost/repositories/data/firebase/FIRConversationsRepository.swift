@@ -9,13 +9,14 @@ import Foundation
 import Firebase
 
 final class FIRConversationsRepository: ConversationsRepository {
+    private let auth = Auth.auth()
     private let db = Firestore.firestore()
     
     @Published private(set) var conversations: [Conversation] = []
     
     //TODO: REWRITE FUNCTION TO AVOID RELOADING BUGS
     func getConversations() {
-        if let userID = Auth.auth().currentUser?.uid {
+        if let userID = auth.currentUser?.uid {
             self.db.collection("Users")
                 .document(userID)
                 .collection("Conv_Refs")
@@ -27,7 +28,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                     
                     Task {
                         do {
-                            //TODO: TRY TO USE MAP INSTEAD OF A FOR-LOOP HERE
+                            //TODO: TRY TO USE MAP INSTEAD OF A FOR-LOOP HERE (MAP CONFLICTS WITH ASYNC CODE)
                             var list: [Conversation] = []
                             for convref in snapshot.documents {
                                 let conversation = try await self.db.collection("Conversations").document(convref.documentID).getDocument()
@@ -59,16 +60,16 @@ final class FIRConversationsRepository: ConversationsRepository {
         }
     }
     
-    //TODO: IMPLEMENT COMPLETION HANDLERS
     //TODO: ENROLL TO APPLE DEVELOPER PROGRAM TO IMPLEMENT NOTIFICATIONS BEHAVIOR
-    func addConversation(qrID: (String, String), location: Location, _ completionHandler: @escaping (Bool) -> Void) {
+    func addConversation(qrID: String, location: Location, _ completionHandler: @escaping (Bool) -> Void) {
+        let (ownerID, itemID): (String, String) = extractTuple(array: qrID.split(separator: ":").map {substr in String(substr)})
         
         let convDict: [String: Any] = [
-            "lost_item_id": qrID.0+":"+qrID.1
+            "lost_item_id": qrID
         ]
         
-        if Auth.auth().currentUser == nil {
-            Auth.auth().signInAnonymously { result, error in
+        if auth.currentUser == nil {
+            auth.signInAnonymously { result, error in
                 guard result != nil else {
                     print("Error while signing in anonymously")
                     completionHandler(false)
@@ -76,43 +77,53 @@ final class FIRConversationsRepository: ConversationsRepository {
                 }
                 
                 let userID = result!.user.uid
-                let convID = String(userID+qrID.0)
+                let convID = String(userID+ownerID)
                 
-                // IF NOT, WE FIRST ADD CONVERSATION TO CONVERSATIONS COLLECTION
-                self.db.collection("Conversations")
-                    .document(convID)
-                    .setData(convDict) { err in
-                        if err != nil {
+                // FIRST WE UPDATE THE LAST ITEM LOCATION
+                self.db.collection("Users")
+                    .document(ownerID)
+                    .collection("Items")
+                    .document(itemID)
+                    .updateData(["last_location": location.toFIRGeopoint()]) { error in
+                        guard error == nil else {
                             completionHandler(false)
                             return
                         }
                         
-                        // THEN ADD CONVREFERENCE TO NON-ANONYMOUS USER ONLY
-                        self.db.collection("Users")
-                            .document(qrID.0)
-                            .collection("Conv_Refs")
+                        
+                        // THEN ADD CONVERSATION TO CONVERSATIONS COLLECTION
+                        self.db.collection("Conversations")
                             .document(convID)
-                            .setData([:]) { err in
-                                if err != nil {
+                            .setData(convDict){ error in
+                                guard error == nil else {
                                     completionHandler(false)
                                     return
                                 }
-                            }
+                                
+                                // FINALLY ADD CONVREFERENCE TO NON-ANONYMOUS USER ONLY
+                                self.db.collection("Users")
+                                    .document(ownerID)
+                                    .collection("Conv_Refs")
+                                    .document(convID)
+                                    .setData([:]){ error in
+                                        guard error == nil else {
+                                            completionHandler(false)
+                                            return
+                                        }
                                         
-                        // FINALLY UPDATE THE LAST ITEM LOCATION
-                        self.db.collection("Users")
-                            .document(qrID.0)
-                            .collection("Items")
-                            .document(qrID.1)
-                            .updateData(["last_location": location.toFIRGeopoint()]) { err in
-                                if err != nil {
-                                    completionHandler(false)
-                                    return
-                                }
+//                                        // AND SEND A NOTIFICATION
+//                                        //TODO: PROVIDE LIST OF DEVICES TO PING
+//                                        FIRNotificationsRepository().sendNotification(title: "A user has found your item!",
+//                                                                                      body: "Your item … has been found by an anonymous user !",
+//                                                                                      devices: []) { success in
+//                                            if !success {
+//                                                completionHandler(success)
+//                                            }
+//                                        }
+                                    }
                             }
                         
-                        
-                        if (try? Auth.auth().signOut()) == nil {
+                        if (try? self.auth.signOut()) == nil {
                             completionHandler(false)
                         } else {
                             completionHandler(true)
@@ -121,57 +132,71 @@ final class FIRConversationsRepository: ConversationsRepository {
                     }
             }
         } else {
-            let userID = Auth.auth().currentUser!.uid
+            let userID = auth.currentUser!.uid
+            // CONVERSATION IDS ARE FORMED BY CONCATENATING USER IDS IN ALPHABETICAL ORDER (CASE SENSITIVE!)
+            let convID = userID < ownerID ? userID+ownerID : ownerID+userID
             
-            // FIRST WE CHECK IF A CONVERSATION ALREADY EXISTS
-            let convIDs = [userID+qrID.0, qrID.0+userID]
-            var exists = false
-            for convID in convIDs {
-                self.db.collection("Conversations")
-                    .document(convID)
-                    .getDocument { document, error in
-                        if let document = document, document.exists {
-                            exists = true
-                        }
-                    }
-            }
-            
-            if exists {
-                completionHandler(false)
-                return
-            }
-            
-            // IF NOT, WE FIRST ADD CONVERSATION TO CONVERSATIONS COLLECTION
-            self.db.collection("Conversations")
-                .document(convIDs[0])
-                .setData(convDict)
-            
-            // THEN ADD CONVREFERENCE TO BOTH USERS
+            // FIRST WE UPDATE THE LAST ITEM LOCATION
             self.db.collection("Users")
-                .document(userID)
-                .collection("Conv_Refs")
-                .document(convIDs[0])
-                .setData([:])
-            
-            self.db.collection("Users")
-                .document(qrID.0)
-                .collection("Conv_Refs")
-                .document(convIDs[0])
-                .setData([:])
-            
-            // FINALLY UPDATE THE LAST ITEM LOCATION
-            self.db.collection("Users")
-                .document(qrID.0)
+                .document(ownerID)
                 .collection("Items")
-                .document(qrID.1)
-                .updateData(["last_location": location.toFIRGeopoint()])
-            
-            completionHandler(true)
+                .document(itemID)
+                .updateData(["last_location": location.toFIRGeopoint()]){ error in
+                    guard error == nil else {
+                        completionHandler(false)
+                        return
+                    }
+                    
+                    // THEN ADD CONVERSATION TO CONVERSATIONS COLLECTION
+                    self.db.collection("Conversations")
+                        .document(convID)
+                        .setData(convDict){ error in
+                            guard error == nil else {
+                                completionHandler(false)
+                                return
+                            }
+                            
+                            // FINALLY ADD CONVREFERENCE TO BOTH USERS
+                            self.db.collection("Users")
+                                .document(ownerID)
+                                .collection("Conv_Refs")
+                                .document(convID)
+                                .setData([:]) { error in
+                                    guard error == nil else {
+                                        completionHandler(false)
+                                        return
+                                    }
+                                    
+                                    
+                                    self.db.collection("Users")
+                                        .document(userID)
+                                        .collection("Conv_Refs")
+                                        .document(convID)
+                                        .setData([:]) { error in
+                                            guard error == nil else {
+                                                completionHandler(false)
+                                                return
+                                            }
+                                            
+                                            completionHandler(true)
+                                            
+//                                            // AND SEND A NOTIFICATION (NOT AVAILABLE NOW)
+//                                            FIRNotificationsRepository().sendNotification(title: "A user has found your item!",
+//                                                                                          body: "Your item … has been found by …!",
+//                                                                                          devices: []) { success in
+//                                                completionHandler(success)
+//                                            }
+                                            
+                                        }
+                                }
+                        }
+                    
+                }
         }
     }
     
     func removeConversation(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void) {
-        if let userID = Auth.auth().currentUser?.uid {
+        if let userID = auth.currentUser?.uid {
             for i in offsets {
                 db.collection("Users")
                     .document(userID)

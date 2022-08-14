@@ -8,8 +8,10 @@
 import Foundation
 import Firebase
 import FirebaseStorage
+import UIKit
 
 final class FIRMessagesRepository: MessagesRepository {
+    private let auth = Auth.auth()
     private let db = Firestore.firestore()
     private let st = Storage.storage()
     private let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -17,8 +19,9 @@ final class FIRMessagesRepository: MessagesRepository {
     @Published private(set) var messages: [Message] = []
     @Published private(set) var lastMessageId: String = ""
     
+    //TODO: IMPLEMENT LOADING OF IMAGES AND AUDIO MESSAGES
     func getMessages(convID: String) {
-        if let userID = Auth.auth().currentUser?.uid {
+        if let userID = auth.currentUser?.uid {
             try? FileManager.default
                 .createDirectory(at: documentsPath.appendingPathComponent("conversations_assets/\(convID)"),
                                  withIntermediateDirectories: true)
@@ -31,7 +34,7 @@ final class FIRMessagesRepository: MessagesRepository {
                         print("Error while fetching messages")
                         return
                     }
-                                        
+                    
                     self.messages = snapshot.documents.map { document in
                         let data = document.data()
                         let isReceived = (data["sender"] as! String) != userID
@@ -39,6 +42,7 @@ final class FIRMessagesRepository: MessagesRepository {
                         let message = Message(id: document.documentID,
                                               isReceived: isReceived,
                                               timestamp: DateTime.fromFIRTimestamp(from: data["timestamp"] as! Timestamp))
+                        
                         if let location = data["location"] as? GeoPoint {
                             return LocationMessage.fromMessage(message: message, location: Location.fromFIRGeopoint(from: location)!)
                             
@@ -47,6 +51,7 @@ final class FIRMessagesRepository: MessagesRepository {
                             let imageFileURL = self.documentsPath.appendingPathComponent(imageUrl)
                             
                             self.downloadFile(strURL: imageUrl){ success in
+//                                self.getMessages(convID: convID)
                                 //TODO: IMPLEMENT HANDLER
                             }
 
@@ -59,6 +64,7 @@ final class FIRMessagesRepository: MessagesRepository {
                             
                             self.downloadFile(strURL: audioUrl) { success in
                                 //TODO: IMPLEMENT HANDLER
+//                                self.getMessages(convID: convID)
                             }
                             
                             return AudioMessage.fromMessage(message: message, audioUrl: audioFileURL)
@@ -72,19 +78,20 @@ final class FIRMessagesRepository: MessagesRepository {
                         self.lastMessageId = id
                     }
                 }
-            
         }
     }
     
     func sendMessage(convID: String, message: Message, _ completionHandler: @escaping (Bool) -> Void) {
-        if let userID = Auth.auth().currentUser?.uid {
+        if let userID = auth.currentUser?.uid {
             
             let prefix = convID.prefix(userID.count)
             let interlocutorID = String(prefix == userID ? convID.suffix(userID.count) : prefix)
             
+            
+            
             var messageDict: [String: Any] = [
                 "sender": (message.isReceived ? interlocutorID : userID) as String,
-                "timestamp": message.timestamp.toFIRTimestamp() as Timestamp,
+                "timestamp": message.timestamp.toFIRTimestamp() as Timestamp
             ]
             
             if let locMsg = message as? LocationMessage {
@@ -157,7 +164,12 @@ final class FIRMessagesRepository: MessagesRepository {
                 }
             }
         
-        completionHandler(true)
+        //TODO: PROVIDE LIST OF DEVICES TO PING
+        FIRNotificationsRepository().sendNotification(title: "\(auth.currentUser!.displayName!)",
+                                                      body: "New message",
+                                                      devices: []) { success in
+            completionHandler(success)
+        }
     }
     
     private func downloadFile(strURL: String, _ completionHandler: @escaping (Bool) -> Void) {

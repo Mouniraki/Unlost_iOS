@@ -16,7 +16,7 @@ struct ChatEntryLayout: View {
         HStack{
             Image(uiImage: conversation.user.profilePicture)
                 .resizable()
-                .scaledToFit()
+                .scaledToFill()
                 .frame(width: 50, height: 50)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(.black, lineWidth: 1))

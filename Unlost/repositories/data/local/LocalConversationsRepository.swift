@@ -51,14 +51,17 @@ final class LocalConversationsRepository: ConversationsRepository {
 //        completionHandler(true)
     }
     
-    func addConversation(qrID: (String, String), location: Location, _ completionHandler: @escaping (Bool) -> Void) {
+    func addConversation(qrID: String, location: Location, _ completionHandler: @escaping (Bool) -> Void) {
         if let id = signedInUserID {
-            let conversation = Conversation(id: id + qrID.0,
-                                            user: User(id: qrID.0,
+            let (ownerID, itemID) = extractTuple(array: qrID.split(separator: ":").map{substr in String(substr)})
+            
+            
+            let conversation = Conversation(id: id + ownerID,
+                                            user: User(id: ownerID,
                                                        firstName: "User",
                                                        lastName: "Name",
                                                        profilePicture: UIImage(systemName: "eye")!),
-                                            item: Item(id: qrID.1,
+                                            item: Item(id: itemID,
                                                        name: "MyItem",
                                                        description: "MyDesc",
                                                        type: .Keys,

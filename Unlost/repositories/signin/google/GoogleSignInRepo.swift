@@ -10,6 +10,8 @@ import Firebase
 import GoogleSignIn
 
 final class GoogleSignInRepo: SignInRepository {
+    private let auth = Auth.auth()
+    
     @Published var isSignedIn = Auth.auth().currentUser != nil
     @Published private(set) var signedInUserID: String? = Auth.auth().currentUser?.uid
     
@@ -44,7 +46,7 @@ final class GoogleSignInRepo: SignInRepository {
             let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
             
             // FIREBASE AUTH PART => TO MOVE OUTSIDE
-            Auth.auth().signIn(with: credential) { result, error in
+            auth.signIn(with: credential) { result, error in
                 if let err = error {
                     print(err.localizedDescription)
                     completionHandler(false)
@@ -71,8 +73,8 @@ final class GoogleSignInRepo: SignInRepository {
                     }
                 }
                 
-                self.isSignedIn = Auth.auth().currentUser?.uid != nil
-                self.signedInUserID = Auth.auth().currentUser?.uid
+                self.isSignedIn = self.auth.currentUser?.uid != nil
+                self.signedInUserID = self.auth.currentUser?.uid
                 completionHandler(true)
             }
         }
@@ -80,10 +82,10 @@ final class GoogleSignInRepo: SignInRepository {
     
     func signOut(_ completionHandler: @escaping (Bool) -> Void) {
         do {
-            try Auth.auth().signOut()
+            try auth.signOut()
             GIDSignIn.sharedInstance.signOut()
-            self.isSignedIn = Auth.auth().currentUser?.uid != nil // MUST BE FALSE, SINCE WE SIGNED OUT
-            self.signedInUserID = Auth.auth().currentUser?.uid
+            self.isSignedIn = auth.currentUser?.uid != nil // MUST BE FALSE, SINCE WE SIGNED OUT
+            self.signedInUserID = auth.currentUser?.uid
             completionHandler(true)
         } catch {
             print(error.localizedDescription)

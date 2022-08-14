@@ -9,12 +9,13 @@ import Foundation
 import Firebase
 
 final class FIRItemsRepository: ItemsRepository {
+    private let auth = Auth.auth()
     private let db = Firestore.firestore()
     
     @Published private(set) var items: [Item] = []
     
     func getItems() {
-        if let userID = Auth.auth().currentUser?.uid {
+        if let userID = auth.currentUser?.uid {
             db.collection("Users")
                 .document(userID)
                 .collection("Items")
@@ -62,32 +63,10 @@ final class FIRItemsRepository: ItemsRepository {
             print(error.localizedDescription)
             return nil
         }
-        
-//        db.collection("Users")
-//            .document(userID)
-//            .collection("Items")
-//            .document(itemID)
-//            .getDocument { snapshot, error in
-//                guard let snapshot = snapshot else {
-//                    print("Error while fetching the requested item")
-//                    completionHandler(nil)
-//                    return
-//                }
-//
-//                let data = snapshot.data()
-//                if let data = data {
-//                    completionHandler(Item(id: snapshot.documentID,
-//                                           name: data["item_name"] as! String,
-//                                           description: data["item_description"] as! String,
-//                                           type: ItemType.allCases[(data["item_type"] as! Int) % 4],
-//                                           lastLocation: Location.fromFIRGeopoint(from: data["last_location"] as? GeoPoint ?? nil),
-//                                           isLost: data["is_lost"] as! Bool))
-//                }
-//            }
     }
     
     func addItem(item: Item, _ completionHandler: @escaping (Bool) -> Void) {
-        if let userID = Auth.auth().currentUser?.uid {
+        if let userID = auth.currentUser?.uid {
             
             let itemDict: [String: Any] = [
                 "item_name": item.name as String,
@@ -108,7 +87,7 @@ final class FIRItemsRepository: ItemsRepository {
     
     func removeItem(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void) {
         
-        if let userID = Auth.auth().currentUser?.uid {
+        if let userID = auth.currentUser?.uid {
             for i in offsets {
                 db.collection("Users")
                     .document(userID)

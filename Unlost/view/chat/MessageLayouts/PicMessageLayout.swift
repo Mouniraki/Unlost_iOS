@@ -10,6 +10,8 @@ import SwiftUI
 struct PicMessageLayout: View {
     let message: PicMessage
     
+    @State private var imagePlaceholder = UIImage(named: "all-out-donuts-thumb")
+    
     var body: some View {
         VStack(alignment: message.isReceived ? .leading : .trailing){
             HStack{
@@ -18,7 +20,7 @@ struct PicMessageLayout: View {
                         .resizable()
                         .scaledToFit()
                 ){
-                    Image(uiImage: loadImage(imgUrl: message.imageURL))
+                    Image(uiImage: imagePlaceholder!)//loadImage(imgUrl: message.imageURL))
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200)
@@ -27,6 +29,11 @@ struct PicMessageLayout: View {
                         .background(message.isReceived ? .gray : .blue)
                         .foregroundColor(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .onAppear {
+                            if loadImage(imgUrl: message.imageURL) != UIImage() {
+                                self.imagePlaceholder = loadImage(imgUrl: message.imageURL)
+                            }
+                        }
                 }
 
             }
@@ -38,7 +45,7 @@ struct PicMessageLayout: View {
         .frame(maxWidth: .infinity, alignment: message.isReceived ? .leading : .trailing)
         .padding(message.isReceived ? .leading : .trailing)
         .padding(.horizontal, 10)
-            
+        
     }
 }
 

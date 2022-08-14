@@ -66,14 +66,13 @@ struct QRScanMenu: View {
                             Button {
                                 showProgressView = true
                                 textFieldId = UUID().uuidString
-                                let splittedQrText = qrText.split(separator: ":")
                                 
                                 if locationService.lastLocation == nil {
                                     showProgressView = false
                                     showLocationErrorAlert.toggle()
                                 } else {
                                     convRepo.addConversation(
-                                        qrID: (String(splittedQrText[0]), String(splittedQrText[1])),
+                                        qrID: qrText,
                                         location: locationService.lastLocation!
                                     ) { isSuccess in
                                         showProgressView = false
