@@ -28,16 +28,6 @@ struct QRScanMenu: View {
     
     @State private var showCodeScanner = false
     
-    func handleScan(result: Result<ScanResult, ScanError>) {
-        switch result {
-        case .success(let result):
-            qrText = result.string
-        case .failure(let error):
-            //TODO: TRIGGER ALERT NOTIFYING FAILURE OF CAMERA INITIALIZATION
-            print("Scanning failed: \(error.localizedDescription)")
-        }
-    }
-    
     var body: some View {
         NavigationView {
             ZStack {
@@ -164,6 +154,15 @@ struct QRScanMenu: View {
         }
 
         
+    }
+    
+    private func handleScan(result: Result<ScanResult, ScanError>) {
+        switch result {
+        case .success(let result):
+            qrText = result.string
+        case .failure(let error):
+            print("Scanning failed: \(error.localizedDescription)")
+        }
     }
 }
 

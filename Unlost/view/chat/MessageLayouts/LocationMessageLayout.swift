@@ -12,7 +12,7 @@ struct LocationMessageLayout: View {
     let message: LocationMessage
     
     //TODO: CHANGE DEFAULT LOCATION IMAGE TO SOMETHING MORE MEANINGFUL
-    @State private var defaultLocationSnapshot = UIImage(named: "all-out-donuts-thumb")
+    @State private var defaultLocationSnapshot = UIImage(named: "locationPlaceholder")
     
     var body: some View {
         VStack(alignment: message.isReceived ? .leading : .trailing){
