@@ -15,26 +15,35 @@ struct ItemsMenu: View {
     @State private var showQrScanSheet = false
     @State private var showSettingsMenu = false
     
-    /**
-     Removes items at given offsets.
-     */
-    func deleteItems(at offsets: IndexSet){ // TODO: MOVE THIS TO VIEWMODEL CLASS
-        itemsRepo.removeItem(at: offsets) { success in
-            //TODO: INSERT CODE HERE
-        }
-    }
+    @State private var showDeleteErrorAlert = false
     
     var body: some View {
         NavigationView {
-            List{
-                ForEach(itemsRepo.items) { item in
-                    NavigationLink(destination: ItemView(item: item)){
-                        ItemLayout(item: item)
+            ZStack {
+                if itemsRepo.isLoading {
+                    ProgressView()
+                } else {
+                    if itemsRepo.items.isEmpty {
+                        Text("No items in the list")
+                    } else {
+                        List{
+                            ForEach(itemsRepo.items) { item in
+                                NavigationLink(destination: ItemView(item: item)){
+                                    ItemLayout(item: item)
+                                }
+                            }
+                            .onDelete { offsets in
+                                itemsRepo.removeItem(at: offsets) { success in
+                                    if !success {
+                                        showDeleteErrorAlert.toggle()
+                                    }
+                                }
+                            }
+                        }
+                        .listStyle(.grouped)
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
-            .listStyle(.grouped)
             .navigationTitle("My Items")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -69,6 +78,9 @@ struct ItemsMenu: View {
             }
             .sheet(isPresented: $showQrScanSheet) {
                 QRScanMenu()
+            }
+            .alert("Unable to delete item. Check your internet connectivity and try again.", isPresented: $showDeleteErrorAlert) {
+                Button("OK", role: .cancel){}
             }
         }
     }

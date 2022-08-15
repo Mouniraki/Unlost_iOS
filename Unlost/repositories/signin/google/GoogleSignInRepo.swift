@@ -53,29 +53,29 @@ final class GoogleSignInRepo: SignInRepository {
                     return
                 }
                 
-                guard let user = result?.user else {
+                guard let authUser = result?.user else {
                     completionHandler(false)
                     return
                 }
                 
                 // IF USER ISNT PRESENT IN FIRESTORE => ADD A NEW ENTRY
-                let db = Firestore.firestore().collection("Users").document(user.uid)
+                let db = Firestore.firestore().collection("Users").document(authUser.uid)
                 
                 db.getDocument { snapshot, error in
-                    guard snapshot != nil else {
+                    guard snapshot != nil, snapshot!.exists else {
                         let userDict: [String: Any] = [
-                            "first_name": user.displayName!, //TODO: FIND HOW TO SPLIT FIRSTNAME & LASTNAME
-                            "last_name": ""
+                            "first_name": user!.profile!.givenName!, //TODO: FIND HOW TO SPLIT FIRSTNAME & LASTNAME
+                            "last_name": user!.profile!.familyName!
                         ]
                             
                         db.setData(userDict)
                         return
                     }
+                    
+                    self.isSignedIn = self.auth.currentUser?.uid != nil
+                    self.signedInUserID = self.auth.currentUser?.uid
+                    completionHandler(true)
                 }
-                
-                self.isSignedIn = self.auth.currentUser?.uid != nil
-                self.signedInUserID = self.auth.currentUser?.uid
-                completionHandler(true)
             }
         }
     }

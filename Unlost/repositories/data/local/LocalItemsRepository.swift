@@ -9,6 +9,7 @@ import Foundation
 
 final class LocalItemsRepository: ItemsRepository {
     private(set) var signedInUserID: String? = "MYUSERID"
+    @Published private(set) var isLoading: Bool = false
     
     @Published private(set) var items: [Item] = []
     

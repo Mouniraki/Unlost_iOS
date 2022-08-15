@@ -31,29 +31,46 @@ struct ChatView: View {
     
     /// For the LocationMessages
     @StateObject var locationService = LocationService.shared
+    
+    /// Error handling pop-ups
     @State private var displayNoLocationAlert = false
+    @State private var displaySendErrorAlert = false
+    @State private var displayNoMicPermissionsAlert = false
+    @State private var displayNoCameraPermissionsAlert = false
     
     var body: some View {
-        //TODO: FIGURE OUT HOW TO FOCUS THE VIEW ON THE LAST MESSAGES
+        //TODO: FIGURE OUT HOW TO FOCUS THE VIEW ON THE LAST MESSAGES PERMANENTLY
         VStack {
-            ScrollViewReader { proxy in
-                ScrollView {
-                    ForEach(messagesRepo.messages, id: \.id) { message in
-                        switch message {
-                            case is PicMessage: PicMessageLayout(message: message as! PicMessage)
-                                
-                            case is LocationMessage: LocationMessageLayout(message: message as! LocationMessage)
-                            
-                            case is AudioMessage: AudioMessageLayout(message: message as! AudioMessage)
-                                
-                            default: TextMessageLayout(message: message as! TextMessage)
+            if messagesRepo.isLoading {
+                Spacer()
+                ProgressView()
+                Spacer()
+            } else {
+                if messagesRepo.messages.isEmpty {
+                    Spacer()
+                    Text("No messages for the moment")
+                    Spacer()
+                } else {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            ForEach(messagesRepo.messages, id: \.id) { message in
+                                switch message {
+                                case is PicMessage: PicMessageLayout(message: message as! PicMessage)
+                                    
+                                case is LocationMessage: LocationMessageLayout(message: message as! LocationMessage)
+                                    
+                                case is AudioMessage: AudioMessageLayout(message: message as! AudioMessage)
+                                    
+                                default: TextMessageLayout(message: message as! TextMessage)
+                                }
+                            }
                         }
-                    }
-                }
-                .onChange(of: messagesRepo.lastMessageId){ id in
-                    print(id)
-                    withAnimation{
-                        proxy.scrollTo(id, anchor: .bottom)
+                        .onChange(of: messagesRepo.lastMessageId){ id in
+                            print(id)
+                            withAnimation{
+                                proxy.scrollTo(id, anchor: .bottom)
+                            }
+                        }
                     }
                 }
             }
@@ -70,7 +87,18 @@ struct ChatView: View {
                         
                         Button {
                             pickFromCamera = true
-                            showSheet.toggle()
+                            if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                                showSheet.toggle()
+                            } else {
+                                AVCaptureDevice.requestAccess(for: .video) { granted in
+                                    if granted {
+                                        showSheet.toggle()
+                                    } else {
+                                        displayNoCameraPermissionsAlert.toggle()
+                                    }
+                                }
+                            }
+                            
                         } label: {
                             Label("Send camera image…", systemImage: "camera")
                         }
@@ -87,7 +115,9 @@ struct ChatView: View {
                                         coordinates: locationService.lastLocation!)
                                 ){
                                     success in
-                                    //TODO: IMPLEMENT
+                                    if !success {
+                                        displaySendErrorAlert.toggle()
+                                    }
                                 }
                             }
                         } label: {
@@ -104,9 +134,16 @@ struct ChatView: View {
                     // Button to cancel recording
                     Button {
                         // WILDCARD HERE ONLY TO SILENCE WARNING MESSAGE
-                        _ = audioRecorder.recordAudioMessage(userID: signInRepo.signedInUserID!, convID: conversation.id, isRecording: isRecording, requestForCancellation: true)
+                        let (_, success) = audioRecorder.recordAudioMessage(userID: signInRepo.signedInUserID!,
+                                                             convID: conversation.id,
+                                                             isRecording: isRecording,
+                                                             requestForCancellation: true)
                         
-                        isRecording.toggle()
+                        if success {
+                            isRecording.toggle()
+                        } else {
+                            displayNoMicPermissionsAlert.toggle()
+                        }
                     } label: {
                         Image(systemName: "xmark.bin")
                             .resizable()
@@ -115,7 +152,7 @@ struct ChatView: View {
                             .foregroundColor(.red)
                     }
                 }
-
+                
                 if !isRecording {
                     TextField("Message", text: $messageStr)
                         .padding(5)
@@ -126,28 +163,36 @@ struct ChatView: View {
                     // Text mentioning recording in progress
                     Text("Recording voice message…")
                         .foregroundColor(.red)
-//                        .frame(width: 280)
+                    //                        .frame(width: 280)
                         .padding(6)
                 }
-
+                
                 if messageStr.isEmpty {
                     // Button to start/stop recording & send it
                     Button {
-                        let audioPath = audioRecorder.recordAudioMessage(userID: signInRepo.signedInUserID!, convID: conversation.id, isRecording: isRecording, requestForCancellation: false)
+                        let (audioPath, success) = audioRecorder.recordAudioMessage(userID: signInRepo.signedInUserID!,
+                                                                         convID: conversation.id,
+                                                                         isRecording: isRecording,
+                                                                         requestForCancellation: false)
                         
                         print(audioPath?.description ?? "No file recorded")
-                        isRecording.toggle()
                         
-                        if audioPath != nil {
+                        if success {
+                            isRecording.toggle()
+                        } else {
+                            displayNoMicPermissionsAlert.toggle()
+                        }
+                        
+                        if audioPath != nil && success {
                             messagesRepo.sendMessage(
                                 convID: conversation.id,
                                 message: AudioMessage(id: "MESSAGE\(messagesRepo.messages.count + 1)",
-                                                     isReceived: false,
+                                                      isReceived: false,
                                                       timestamp: DateTime.fromAppleDate(from: Date.now),
-                                                      audioUrl: audioPath!)){
-                                                          success in
-                                                          print("AUDIO MESSAGE SUCCESS: \(success)")
-                                                          //TODO: IMPLEMENT
+                                                      audioUrl: audioPath!)){ success in
+                                                          if !success {
+                                                              displaySendErrorAlert.toggle()
+                                                          }
                                                       }
                         }
                     } label: {
@@ -174,7 +219,9 @@ struct ChatView: View {
                                 timestamp: DateTime.fromAppleDate(from: Date.now),
                                 body: messageStr)){
                                     success in
-                                    //TODO: IMPLEMENT
+                                    if !success {
+                                        displaySendErrorAlert.toggle()
+                                    }
                                 }
                         
                         messageStr = ""
@@ -206,12 +253,22 @@ struct ChatView: View {
                         timestamp: DateTime.fromAppleDate(from: Date.now),
                         imageURL: imageURL!)){
                             success in
-                            //TODO: IMPLEMENT
-                            print("PIC MESSAGE SUCCESS: \(success)")
+                            if !success {
+                                displaySendErrorAlert.toggle()
+                            }
                         }
             }
         }
         .alert("Unable to send the location message. Make sure you granted access to location for Unlost.", isPresented: $displayNoLocationAlert) {
+            Button("OK", role: .cancel){}
+        }
+        .alert("Unable to send your message. Check your internet connectivity and try again.", isPresented: $displaySendErrorAlert) {
+            Button("OK", role: .cancel){}
+        }
+        .alert("Unable to record voice messages. Make sure you granted access to microphone for Unlost.", isPresented: $displayNoMicPermissionsAlert) {
+            Button("OK", role: .cancel){}
+        }
+        .alert("Unable to take pictures with the camera. Make sure you granted access to the camera for Unlost.", isPresented: $displayNoCameraPermissionsAlert) {
             Button("OK", role: .cancel){}
         }
         .toolbar{
@@ -227,7 +284,7 @@ struct ChatView: View {
                         Text("Related to item \"\(conversation.item.name)\" ").font(.subheadline)
                     }
                 }
-                    
+                
             }
         }
     }

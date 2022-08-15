@@ -10,6 +10,7 @@ import UIKit
 
 final class LocalConversationsRepository: ConversationsRepository {
     private(set) var signedInUserID: String? = "MYUSERID"
+    @Published private(set) var isLoading: Bool = false
     
     @Published private(set) var conversations: [Conversation] = []
     

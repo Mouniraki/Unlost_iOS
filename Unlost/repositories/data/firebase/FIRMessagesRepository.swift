@@ -18,10 +18,12 @@ final class FIRMessagesRepository: MessagesRepository {
     
     @Published private(set) var messages: [Message] = []
     @Published private(set) var lastMessageId: String = ""
+    @Published private(set) var isLoading: Bool = false
     
     //TODO: IMPLEMENT LOADING OF IMAGES AND AUDIO MESSAGES
     func getMessages(convID: String) {
         if let userID = auth.currentUser?.uid {
+            self.isLoading = true
             try? FileManager.default
                 .createDirectory(at: documentsPath.appendingPathComponent("conversations_assets/\(convID)"),
                                  withIntermediateDirectories: true)
@@ -35,48 +37,59 @@ final class FIRMessagesRepository: MessagesRepository {
                         return
                     }
                     
-                    self.messages = snapshot.documents.map { document in
-                        let data = document.data()
-                        let isReceived = (data["sender"] as! String) != userID
-                        
-                        let message = Message(id: document.documentID,
-                                              isReceived: isReceived,
-                                              timestamp: DateTime.fromFIRTimestamp(from: data["timestamp"] as! Timestamp))
-                        
-                        if let location = data["location"] as? GeoPoint {
-                            return LocationMessage.fromMessage(message: message, location: Location.fromFIRGeopoint(from: location)!)
+                    Task {
+                        var messageTemp: [Message] = []
+                        for document in snapshot.documents {
                             
-                        } else if let imageUrl = data["image_url"] as? String {
+                            let data = document.data()
+                            let isReceived = (data["sender"] as! String) != userID
                             
-                            let imageFileURL = self.documentsPath.appendingPathComponent(imageUrl)
+                            let message = Message(id: document.documentID,
+                                                  isReceived: isReceived,
+                                                  timestamp: DateTime.fromFIRTimestamp(from: data["timestamp"] as! Timestamp))
                             
-                            self.downloadFile(strURL: imageUrl){ success in
-//                                self.getMessages(convID: convID)
-                                //TODO: IMPLEMENT HANDLER
-                            }
+                            if let location = data["location"] as? GeoPoint {
+                                messageTemp.append(
+                                    LocationMessage.fromMessage(message: message, location: Location.fromFIRGeopoint(from: location)!)
+                                )
+                                
+                            } else if let imageUrl = data["image_url"] as? String {
+                                
+                                let imageFileURL = self.documentsPath.appendingPathComponent(imageUrl)
+                                
+                                if await self.downloadFile(strURL: imageUrl){
+                                    messageTemp.append(
+                                        PicMessage.fromMessage(message: message, imageURL: imageFileURL)
+                                    )
+                                }
 
-                            return PicMessage.fromMessage(message: message, imageURL: imageFileURL)
-                            
-                        } else if let audioUrl = data["audio_url"] as? String {
-                            let audioFileURL = self.documentsPath.appendingPathComponent(audioUrl)
-                            
-                            print("AUDIO FILE DOWNLOAD LOCATION: \(audioFileURL)")
-                            
-                            self.downloadFile(strURL: audioUrl) { success in
-                                //TODO: IMPLEMENT HANDLER
-//                                self.getMessages(convID: convID)
+                            } else if let audioUrl = data["audio_url"] as? String {
+                                let audioFileURL = self.documentsPath.appendingPathComponent(audioUrl)
+                                
+                                print("AUDIO FILE DOWNLOAD LOCATION: \(audioFileURL)")
+                                
+                                if await self.downloadFile(strURL: audioUrl) {
+                                    messageTemp.append(
+                                        AudioMessage.fromMessage(message: message, audioUrl: audioFileURL)
+                                    )
+                                }
+                                
+                            } else {
+                                messageTemp.append(
+                                    TextMessage.fromMessage(message: message, body: data["body"] as! String)
+                                )
                             }
-                            
-                            return AudioMessage.fromMessage(message: message, audioUrl: audioFileURL)
-                            
-                        } else {
-                            return TextMessage.fromMessage(message: message, body: data["body"] as! String)
                         }
-                    }.sorted { $0.timestamp < $1.timestamp }
-                    
-                    if let id = self.messages.last?.id {
-                        self.lastMessageId = id
+                        
+                        self.messages = messageTemp.sorted { $0.timestamp < $1.timestamp }
+                        
+                        if let id = self.messages.last?.id {
+                            self.lastMessageId = id
+                        }
+                        
+                        self.isLoading = false
                     }
+
                 }
         }
     }
@@ -86,9 +99,7 @@ final class FIRMessagesRepository: MessagesRepository {
             
             let prefix = convID.prefix(userID.count)
             let interlocutorID = String(prefix == userID ? convID.suffix(userID.count) : prefix)
-            
-            
-            
+
             var messageDict: [String: Any] = [
                 "sender": (message.isReceived ? interlocutorID : userID) as String,
                 "timestamp": message.timestamp.toFIRTimestamp() as Timestamp
@@ -164,26 +175,26 @@ final class FIRMessagesRepository: MessagesRepository {
                 }
             }
         
-        //TODO: PROVIDE LIST OF DEVICES TO PING
-        FIRNotificationsRepository().sendNotification(title: "\(auth.currentUser!.displayName!)",
-                                                      body: "New message",
-                                                      devices: []) { success in
-            completionHandler(success)
-        }
+//        //TODO: PROVIDE LIST OF DEVICES TO PING
+//        FIRNotificationsRepository().sendNotification(title: "\(auth.currentUser!.displayName!)",
+//                                                      body: "New message",
+//                                                      devices: []) { success in
+//            completionHandler(success)
+//        }
     }
     
-    private func downloadFile(strURL: String, _ completionHandler: @escaping (Bool) -> Void) {
-        let gsReference = self.st.reference().child(strURL)
-        
-        let localFileURL = self.documentsPath.appendingPathComponent(strURL)
-                
-        gsReference.write(toFile: localFileURL) { url, error in
-            if error != nil {
-                // PERFORM ACTIONS
-                completionHandler(false)
-            } else {
-                completionHandler(true)
-            }
+    @MainActor
+    private func downloadFile(strURL: String) async -> Bool{
+        do {
+            let gsReference = self.st.reference().child(strURL)
+            
+            let localFileURL = self.documentsPath.appendingPathComponent(strURL)
+                    
+            _ = try await gsReference.writeAsync(toFile: localFileURL)
+            
+            return true
+        } catch {
+            return false
         }
     }
     

@@ -16,26 +16,36 @@ struct ChatMenu: View {
     @State private var showSettingsSheet = false
     @State private var showQrScanSheet = false
     
-    //TODO: REPLACE USER ID BY ACTUAL UID
-    func deleteItems(at offsets: IndexSet){
-        conversationsRepo.removeConversation(at: offsets){
-            success in
-            //TODO: INSERT CODE HERE
-        }
-    }
+    @State private var showDeleteErrorAlert = false
     
     var body: some View {
         NavigationView{
-            List{
-                ForEach(conversationsRepo.conversations) { conversation in
-                    NavigationLink(destination: ChatView(conversation: conversation)){
-                        ChatEntryLayout(conversation: conversation)
+            ZStack {
+                if conversationsRepo.isLoading {
+                    ProgressView()
+                } else {
+                    if conversationsRepo.conversations.isEmpty {
+                        Text("No conversations in the list")
+                    } else {
+                        List{
+                            ForEach(conversationsRepo.conversations) { conversation in
+                                NavigationLink(destination: ChatView(conversation: conversation)){
+                                    ChatEntryLayout(conversation: conversation)
+                                }
+                            }
+                            .onDelete{ offsets in
+                                conversationsRepo.removeConversation(at: offsets) { success in
+                                    if !success {
+                                        showDeleteErrorAlert.toggle()
+                                    }
+                                }
+                            }
+                        }
+                        .listStyle(.grouped)
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
             .navigationTitle("My Chats")
-            .listStyle(.grouped)
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading){
                     EditButton()
@@ -63,6 +73,9 @@ struct ChatMenu: View {
             }
             .sheet(isPresented: $showQrScanSheet) {
                 QRScanMenu()
+            }
+            .alert("Unable to remove conversations. Check your internet connectivity and try again.", isPresented: $showDeleteErrorAlert) {
+                Button("OK", role: .cancel){}
             }
         }
     }

@@ -13,9 +13,12 @@ final class FIRItemsRepository: ItemsRepository {
     private let db = Firestore.firestore()
     
     @Published private(set) var items: [Item] = []
+    @Published private(set) var isLoading: Bool = false
     
     func getItems() {
         if let userID = auth.currentUser?.uid {
+            self.isLoading = true
+            
             db.collection("Users")
                 .document(userID)
                 .collection("Items")
@@ -35,6 +38,7 @@ final class FIRItemsRepository: ItemsRepository {
                                     lastLocation: Location.fromFIRGeopoint(from: data["last_location"] as? GeoPoint ?? nil),
                                     isLost: data["is_lost"] as! Bool)
                     }
+                    self.isLoading = false
                 }
         }
     }

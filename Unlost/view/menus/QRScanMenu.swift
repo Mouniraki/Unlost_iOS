@@ -7,6 +7,7 @@
 
 import CodeScanner
 import SwiftUI
+import AVFoundation
 
 struct QRScanMenu: View {
     @Environment (\.presentationMode) var presentationMode
@@ -22,7 +23,10 @@ struct QRScanMenu: View {
     @StateObject var locationService = LocationService.shared
     @State private var showLocationErrorAlert = false
     @State private var showProcessingErrorAlert = false
+    @State private var showNoCameraPermissionsAlert = false
     @State private var showSuccessAlert = false
+    
+    @State private var showCodeScanner = false
     
     func handleScan(result: Result<ScanResult, ScanError>) {
         switch result {
@@ -38,8 +42,13 @@ struct QRScanMenu: View {
         NavigationView {
             ZStack {
                 VStack {
-                    CodeScannerView(codeTypes: [.qr], simulatedData: "MyQRCodeContent", completion: handleScan)
-                        .frame(height: 300)
+                    if showCodeScanner {
+                        CodeScannerView(codeTypes: [.qr], simulatedData: "MyQRCodeContent", completion: handleScan)
+                            .frame(height: 300)
+                    } else {
+                        Text("UNABLE TO START CAMERA")
+                            .frame(height: 300)
+                    }
                     
                     Form {
                         Section("Report item") {
@@ -49,8 +58,10 @@ struct QRScanMenu: View {
                                         isValid = false
                                         isValidText = "The ID field is empty"
                                     } else {
+                                        let nbSeparators = text.filter{char in char == ":"}.count
                                         let arr = text.split(separator: ":")
-                                        if arr.count == 2 && !arr[0].isEmpty && !arr[1].isEmpty {
+                                        
+                                        if nbSeparators == 1 && arr.count == 2 && !arr[0].isEmpty && !arr[1].isEmpty {
                                             isValid = true
                                             isValidText = "Report item"
                                         } else {
@@ -95,6 +106,9 @@ struct QRScanMenu: View {
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
+                            .alert("Unable to start the camera. Please make sure you granted camera permissions and try again.", isPresented: $showNoCameraPermissionsAlert){
+                                Button("OK", role: .cancel){}
+                            }
                             .alert("Error: the QR code doesn't belong to a valid item, or you already notified the user for this item.", isPresented: $showProcessingErrorAlert){
                                 Button("OK", role: .cancel){}
                             }
@@ -131,6 +145,20 @@ struct QRScanMenu: View {
                             .shadow(radius: 4)
                     }
                    
+                }
+            }
+            .onAppear {
+                if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                    showCodeScanner = true
+                } else {
+                    AVCaptureDevice.requestAccess(for: .video) { granted in
+                        if granted {
+                            showCodeScanner = true
+                        } else {
+                            showCodeScanner = false
+                            showNoCameraPermissionsAlert.toggle()
+                        }
+                    }
                 }
             }
         }

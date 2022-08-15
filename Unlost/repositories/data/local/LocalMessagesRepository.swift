@@ -11,6 +11,7 @@ import UIKit
 final class LocalMessagesRepository: MessagesRepository {    
     @Published private(set) var messages: [Message] = []
     @Published private(set) var lastMessageId: String = ""
+    @Published private(set) var isLoading: Bool = false
 
     
     func getMessages(convID: String) {
