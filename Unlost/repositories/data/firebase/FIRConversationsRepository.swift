@@ -82,7 +82,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                 let userID = result!.user.uid
                 let convID = userID < ownerID ? userID+ownerID : ownerID+userID
                 
-                self.performActions(ownerID: ownerID, itemID: itemID, convID: convID, location: location) { success in
+                self.performActions(userID: userID, ownerID: ownerID, itemID: itemID, convID: convID, location: location) { success in
                     if (try? self.auth.signOut()) == nil {
                         completionHandler(false)
                     } else {
@@ -91,18 +91,18 @@ final class FIRConversationsRepository: ConversationsRepository {
                     return
                 }
             }
-
+            
         } else {
             let userID = auth.currentUser!.uid
             let convID = userID < ownerID ? userID+ownerID : ownerID+userID
             
-            self.performActions(ownerID: ownerID, itemID: itemID, convID: convID, location: location) { success in
+            self.performActions(userID: userID, ownerID: ownerID, itemID: itemID, convID: convID, location: location) { success in
                 if success {
                     self.fs.collection("Users")
                         .document(userID)
                         .collection("Conv_Refs")
                         .document(convID)
-                        .setData([:]) { error in
+                        .setData(["lost_item_id" : qrID]) { error in
                             guard error == nil else {
                                 completionHandler(false)
                                 return
@@ -121,7 +121,7 @@ final class FIRConversationsRepository: ConversationsRepository {
     }
     
     
-    private func performActions(ownerID: String, itemID: String, convID: String, location: Location, _ completionHandler: @escaping (Bool) -> Void) {
+    private func performActions(userID: String, ownerID: String, itemID: String, convID: String, location: Location, _ completionHandler: @escaping (Bool) -> Void) {
         let convDict: [String: Any] = [
             "lost_item_id": ownerID+":"+itemID
         ]
@@ -133,7 +133,7 @@ final class FIRConversationsRepository: ConversationsRepository {
             .document(itemID)
             .getDocument { snapshot, error in
                 guard let snapshot = snapshot,
-                        snapshot.exists == true
+                      snapshot.exists == true
                 else {
                     completionHandler(false)
                     return
@@ -159,32 +159,78 @@ final class FIRConversationsRepository: ConversationsRepository {
                                     return
                                 }
                                 
-                                // FINALLY ADD CONVREFERENCE TO NON-ANONYMOUS USER ONLY
+                                // FINALLY ADD CONVREFERENCE TO NON-ANONYMOUS USER ONLY & ADD MESSAGES
                                 self.fs.collection("Users")
                                     .document(ownerID)
                                     .collection("Conv_Refs")
                                     .document(convID)
-                                    .setData([:]){ error in
+                                    .setData(convDict){ error in
                                         guard error == nil else {
                                             completionHandler(false)
                                             return
                                         }
-                                        
-        //                                // SEND A NOTIFICATION (NOT AVAILABLE NOW)
-        //                                FIRNotificationsRepository().sendNotification(title: "A user has found your item!",
-        //                                                                              body: "Your item … has been found by …!",
-        //                                                                              devices: []) { success in
-        //                                    completionHandler(success)
-        //                                }
-                                        
-                                        completionHandler(true)
+                                        // ADD A LOCATION MESSAGE AND A TEXT MESSAGE
+                                        self.sendLocationAndText(userID: userID, convID: convID, location: location) { success in
+                                            guard success else {
+                                                completionHandler(false)
+                                                return
+                                            }
+                                            //                                // SEND A NOTIFICATION (NOT AVAILABLE NOW)
+                                            //                                FIRNotificationsRepository().sendNotification(title: "A user has found your item!",
+                                            //                                                                              body: "Your item … has been found by …!",
+                                            //                                                                              devices: []) { success in
+                                            //                                    completionHandler(success)
+                                            //                                }
+                                            completionHandler(true)
+                                        }
+ 
                                     }
                             }
                     }
                 
             }
+    }
+    
+    private func sendLocationAndText(userID: String, convID: String, location: Location, _ completionHandler: @escaping (Bool) -> Void) {
+        let messageDict: [String: Any] = [
+            "sender": userID as String,
+            "timestamp": FieldValue.serverTimestamp()
+        ]
         
-
+        // LOCATION MESSAGE
+        self.fs.collection("Conversations")
+            .document(convID)
+            .collection("Messages")
+            .addDocument(data: messageDict.merging(
+                ["location": location.toFIRGeopoint() as GeoPoint],
+                uniquingKeysWith: { first, _ in
+                    first
+                }))
+        { error in
+            guard error == nil else {
+                completionHandler(false)
+                return
+            }
+            
+            // TEXT MESSAGE
+            self.fs.collection("Conversations")
+                .document(convID)
+                .collection("Messages")
+                .addDocument(data: messageDict.merging(
+                    ["body": "Hey ! I just found your item, I have sent you my location so that you know where it was."],
+                    uniquingKeysWith: { first, _ in
+                        first
+                    }))
+            { error in
+                guard error == nil else {
+                    completionHandler(false)
+                    return
+                }
+                
+                completionHandler(true)
+            }
+            
+        }
     }
     
     
