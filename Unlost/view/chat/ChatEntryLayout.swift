@@ -18,6 +18,7 @@ struct ChatEntryLayout: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 50, height: 50)
+                .background(.white)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(.black, lineWidth: 1))
                 .padding(EdgeInsets(top: 5, leading: 10,  bottom: 5, trailing: 10))
