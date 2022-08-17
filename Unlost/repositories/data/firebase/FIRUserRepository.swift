@@ -12,7 +12,7 @@ import UIKit
 
 final class FIRUserRepository: UserRepository {
     private let auth = Auth.auth()
-    private let db = Firestore.firestore()
+    private let fs = Firestore.firestore()
     private let st = Storage.storage()
 
     @Published private(set) var user: User? = nil
@@ -29,7 +29,7 @@ final class FIRUserRepository: UserRepository {
     func getUser(userID: String?) async -> User? {
         do {
             if let userID = userID {
-                let snapshot = try await db.collection("Users").document(userID).getDocument()
+                let snapshot = try await fs.collection("Users").document(userID).getDocument()
                 let data = snapshot.data()
                 if snapshot.exists {
                     if data!["user_icon"] != nil {
@@ -74,7 +74,7 @@ final class FIRUserRepository: UserRepository {
                 }
                 
                 //TODO: FIND A WAY TO CHECK SUCCESS OF OPERATION
-                self.db.collection("Users")
+                self.fs.collection("Users")
                     .document(user.id)
                     .updateData([
                         "user_icon": FIRstoragePath

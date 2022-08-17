@@ -8,11 +8,13 @@
 import Foundation
 import Firebase
 import FirebaseStorage
+import FirebaseDatabase
 import UIKit
 
 final class FIRMessagesRepository: MessagesRepository {
     private let auth = Auth.auth()
-    private let db = Firestore.firestore()
+    private let fs = Firestore.firestore()
+    private let db = Database.database()
     private let st = Storage.storage()
     private let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     
@@ -28,7 +30,7 @@ final class FIRMessagesRepository: MessagesRepository {
                 .createDirectory(at: documentsPath.appendingPathComponent("conversations_assets/\(convID)"),
                                  withIntermediateDirectories: true)
             
-            db.collection("Conversations")
+            fs.collection("Conversations")
                 .document(convID)
                 .collection("Messages")
                 .addSnapshotListener { snapshot, error in
@@ -43,10 +45,11 @@ final class FIRMessagesRepository: MessagesRepository {
                             
                             let data = document.data()
                             let isReceived = (data["sender"] as! String) != userID
+                            let timestamp = document.get("timestamp", serverTimestampBehavior: .estimate) as? Timestamp
                             
                             let message = Message(id: document.documentID,
                                                   isReceived: isReceived,
-                                                  timestamp: DateTime.fromFIRTimestamp(from: data["timestamp"] as! Timestamp))
+                                                  timestamp: DateTime.fromFIRTimestamp(from: timestamp ?? Timestamp.init(date: Date.now)))
                             
                             if let location = data["location"] as? GeoPoint {
                                 messageTemp.append(
@@ -102,7 +105,7 @@ final class FIRMessagesRepository: MessagesRepository {
 
             var messageDict: [String: Any] = [
                 "sender": (message.isReceived ? interlocutorID : userID) as String,
-                "timestamp": message.timestamp.toFIRTimestamp() as Timestamp
+                "timestamp": FieldValue.serverTimestamp()
             ]
             
             if let locMsg = message as? LocationMessage {
@@ -164,7 +167,7 @@ final class FIRMessagesRepository: MessagesRepository {
     }
     
     private func sendMessageRoutine(convID: String, data: [String: Any], _ completionHandler: @escaping (Bool) -> Void) {
-        self.db.collection("Conversations")
+        self.fs.collection("Conversations")
             .document(convID)
             .collection("Messages")
             .addDocument(data: data) { err in

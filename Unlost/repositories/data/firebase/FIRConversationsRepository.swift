@@ -7,10 +7,11 @@
 
 import Foundation
 import Firebase
+import FirebaseDatabase
 
 final class FIRConversationsRepository: ConversationsRepository {
     private let auth = Auth.auth()
-    private let db = Firestore.firestore()
+    private let fs = Firestore.firestore()
     
     @Published private(set) var conversations: [Conversation] = []
     @Published private(set) var isLoading: Bool = false
@@ -19,7 +20,7 @@ final class FIRConversationsRepository: ConversationsRepository {
     func getConversations() {
         if let userID = auth.currentUser?.uid {
             self.isLoading = true
-            self.db.collection("Users")
+            self.fs.collection("Users")
                 .document(userID)
                 .collection("Conv_Refs")
                 .addSnapshotListener { snapshot, error in
@@ -33,7 +34,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                             //TODO: TRY TO USE MAP INSTEAD OF A FOR-LOOP HERE (MAP CONFLICTS WITH ASYNC CODE)
                             var list: [Conversation] = []
                             for convref in snapshot.documents {
-                                let conversation = try await self.db.collection("Conversations").document(convref.documentID).getDocument()
+                                let conversation = try await self.fs.collection("Conversations").document(convref.documentID).getDocument()
                                 let data = conversation.data()
                                 // EACH CONVERSATION ID IS THE CONCATENATION OF BOTH THE CURRENT USERID & THE INTERLOCUTOR ID
                                 let convIDPrefix = conversation.documentID.prefix(userID.count)
@@ -97,7 +98,7 @@ final class FIRConversationsRepository: ConversationsRepository {
             
             self.performActions(ownerID: ownerID, itemID: itemID, convID: convID, location: location) { success in
                 if success {
-                    self.db.collection("Users")
+                    self.fs.collection("Users")
                         .document(userID)
                         .collection("Conv_Refs")
                         .document(convID)
@@ -126,7 +127,7 @@ final class FIRConversationsRepository: ConversationsRepository {
         ]
         
         // FIRST WE CHECK IF THE OWNER & ITS ITEM EXIST
-        self.db.collection("Users")
+        self.fs.collection("Users")
             .document(ownerID)
             .collection("Items")
             .document(itemID)
@@ -139,7 +140,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                 }
                 
                 // THEN WE UPDATE THE LAST LOCATION OF THE ITEM
-                self.db.collection("Users")
+                self.fs.collection("Users")
                     .document(ownerID)
                     .collection("Items")
                     .document(itemID)
@@ -150,7 +151,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                         }
                         
                         // THEN ADD CONVERSATION TO CONVERSATIONS COLLECTION
-                        self.db.collection("Conversations")
+                        self.fs.collection("Conversations")
                             .document(convID)
                             .setData(convDict){ error in
                                 guard error == nil else {
@@ -159,7 +160,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                                 }
                                 
                                 // FINALLY ADD CONVREFERENCE TO NON-ANONYMOUS USER ONLY
-                                self.db.collection("Users")
+                                self.fs.collection("Users")
                                     .document(ownerID)
                                     .collection("Conv_Refs")
                                     .document(convID)
@@ -191,7 +192,7 @@ final class FIRConversationsRepository: ConversationsRepository {
     func removeConversation(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void) {
         if let userID = auth.currentUser?.uid {
             for i in offsets {
-                db.collection("Users")
+                fs.collection("Users")
                     .document(userID)
                     .collection("Conv_Refs")
                     .document(conversations[i].id)
