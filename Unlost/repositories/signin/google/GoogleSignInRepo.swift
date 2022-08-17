@@ -68,7 +68,17 @@ final class GoogleSignInRepo: SignInRepository {
                             "last_name": user!.profile!.familyName!
                         ]
                             
-                        db.setData(userDict)
+                        db.setData(userDict) { error in
+                            guard error != nil else {
+                                completionHandler(false)
+                                return
+                            }
+                            
+                            self.isSignedIn = self.auth.currentUser?.uid != nil
+                            self.signedInUserID = self.auth.currentUser?.uid
+                            completionHandler(true)
+                        }
+                        
                         return
                     }
                     

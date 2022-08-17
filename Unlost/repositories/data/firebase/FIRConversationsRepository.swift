@@ -170,11 +170,11 @@ final class FIRConversationsRepository: ConversationsRepository {
                                             return
                                         }
                                         // ADD A LOCATION MESSAGE AND A TEXT MESSAGE
-                                        self.sendLocationAndText(userID: userID, convID: convID, location: location) { success in
-                                            guard success else {
-                                                completionHandler(false)
-                                                return
-                                            }
+//                                        self.sendLocationAndText(userID: userID, convID: convID, location: location) { success in
+//                                            guard success else {
+//                                                completionHandler(false)
+//                                                return
+//                                            }
                                             //                                // SEND A NOTIFICATION (NOT AVAILABLE NOW)
                                             //                                FIRNotificationsRepository().sendNotification(title: "A user has found your item!",
                                             //                                                                              body: "Your item … has been found by …!",
@@ -182,7 +182,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                                             //                                    completionHandler(success)
                                             //                                }
                                             completionHandler(true)
-                                        }
+//                                        }
  
                                     }
                             }
