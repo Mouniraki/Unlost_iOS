@@ -29,6 +29,7 @@ struct QRCodeView: View {
                     .frame(width: 300, height: 300)
                 Text(qrStr)
                     .foregroundColor(.black)
+                    .frame(width: 300)
             }
             .padding()
             .background(Color.white.shadow(color: Color.black, radius: 2))

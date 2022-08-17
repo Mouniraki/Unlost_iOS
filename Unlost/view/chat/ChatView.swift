@@ -278,6 +278,7 @@ struct ChatView: View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 30, height: 30)
+                        .background(.white)
                         .clipShape(Circle())
                     VStack(alignment: .leading){
                         Text(conversation.user.getFullUserName()).font(.headline)
