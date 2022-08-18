@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct SettingsMenu: View {
     @Environment (\.presentationMode) var presentationMode
@@ -17,6 +18,8 @@ struct SettingsMenu: View {
     @State private var pickFromCamera = false
     @State private var showSignOutAlert = false
     @State private var showSignOutErrorAlert = false
+    
+    @State private var showNoCameraPermissionsAlert = false
     
     var body: some View {
         NavigationView {
@@ -50,7 +53,17 @@ struct SettingsMenu: View {
                         Menu {
                             Button {
                                 pickFromCamera = true
-                                showSheet.toggle()
+                                if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                                    showSheet.toggle()
+                                } else {
+                                    AVCaptureDevice.requestAccess(for: .video) { granted in
+                                        if granted {
+                                            showSheet.toggle()
+                                        } else {
+                                            showNoCameraPermissionsAlert.toggle()
+                                        }
+                                    }
+                                }
                             } label: {
                                 Label("Take from camera…", systemImage: "camera")
                             }
@@ -84,6 +97,9 @@ struct SettingsMenu: View {
                         Button("Cancel", role: .cancel) {}
                     }
                     .alert("Error while signing out. Check your internet connection and try again.", isPresented: $showSignOutErrorAlert) {
+                        Button("OK", role: .cancel){}
+                    }
+                    .alert("Unable to take pictures with the camera. Make sure you granted access to the camera for Unlost.", isPresented: $showNoCameraPermissionsAlert) {
                         Button("OK", role: .cancel){}
                     }
                 }
