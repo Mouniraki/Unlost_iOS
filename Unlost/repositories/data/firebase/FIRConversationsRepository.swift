@@ -43,7 +43,7 @@ final class FIRConversationsRepository: ConversationsRepository {
                                 let user = await FIRUserRepository().getUser(userID: interlocutorID) ?? User(id: "ANONYMOUSID",
                                                                                                              firstName: "Anonymous",
                                                                                                              lastName: "User",
-                                                                                                             profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
+                                                                                                             profilePicture: UIImage(systemName: "person.crop.circle.fill") ?? UIImage())
                                 
                                 let itemID = (data!["lost_item_id"] as! String).split(separator: ":")
                                 let isMyItem = itemID[0] == userID
@@ -137,7 +137,7 @@ final class FIRConversationsRepository: ConversationsRepository {
             .document(itemID)
             .getDocument { snapshot, error in
                 guard let snapshot = snapshot,
-                      snapshot.exists == true
+                      snapshot.exists
                 else {
                     completionHandler(false)
                     return

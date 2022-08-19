@@ -48,7 +48,7 @@ final class FIRUserRepository: UserRepository {
                         return User(id: snapshot.documentID,
                                     firstName: data!["first_name"] as! String,
                                     lastName: data!["last_name"] as! String,
-                                    profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
+                                    profilePicture: UIImage(systemName: "person.crop.circle.fill") ?? UIImage())
                     }
                 } else {
                     return nil

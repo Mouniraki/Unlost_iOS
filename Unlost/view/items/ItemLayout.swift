@@ -12,7 +12,7 @@ struct ItemLayout: View {
     
     var body: some View {
         HStack{
-            Image(systemName: item.getRelatedIconType(itemType: item.type))
+            Image(systemName: ItemType.getRelatedIconType(itemType: item.type))
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)

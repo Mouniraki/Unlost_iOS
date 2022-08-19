@@ -8,7 +8,6 @@
 import Foundation
 
 final class AudioMessage: Message {
-    //TODO: ADD AUDIO ATTRIBUTE
     let audioUrl: URL
     
     init(id: String, isReceived: Bool, timestamp: DateTime, audioUrl: URL) {

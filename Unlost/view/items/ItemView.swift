@@ -25,7 +25,7 @@ struct ItemView: View {
     var body: some View {
         VStack{
             VStack{
-                Image(systemName: item.getRelatedIconType(itemType: item.type))
+                Image(systemName: ItemType.getRelatedIconType(itemType: item.type))
                     .resizable()
                     .scaledToFit()
                     .frame(width: 70, height: 70)

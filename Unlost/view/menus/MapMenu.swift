@@ -10,7 +10,7 @@ import MapKit
 
 struct MapMenu: View {
     @EnvironmentObject var itemsRepo: FIRItemsRepository
-        
+    
     @State private var showPinDescription = false
     @State private var showSettingsSheet = false
     @State private var showQrScanSheet = false
@@ -31,11 +31,16 @@ struct MapMenu: View {
         let locationsCount = Double(locations.count)
         
         let accLoc = locations.reduce(Location(latitude: 0.0, longitude: 0.0)) { lastRes, newEl in
-            Location(latitude: newEl!.latitude + lastRes.latitude, longitude: newEl!.longitude + lastRes.longitude)
+            Location(
+                latitude: newEl!.latitude + lastRes.latitude,
+                longitude: newEl!.longitude + lastRes.longitude)
         }
         
         if locationsCount > 0 {
-            return Location(latitude: accLoc.latitude / locationsCount, longitude: accLoc.longitude / locationsCount).toCLLocation()
+            return Location(
+                latitude: accLoc.latitude / locationsCount,
+                longitude: accLoc.longitude / locationsCount
+            ).toCLLocation()
         } else {
             return Location(latitude: 45.0, longitude: 2.0).toCLLocation()
         }
@@ -45,7 +50,7 @@ struct MapMenu: View {
     var body: some View {
         //TODO: FIGURE OUT HOW TO ENABLE/DISABLE INFO-BUBBLES FOR INDIVIDUAL MARKERS
         NavigationView {
-            Map(coordinateRegion: $defaultRegion, annotationItems: itemsRepo.items.filter{
+            Map(coordinateRegion: $defaultRegion, annotationItems: itemsRepo.items.filter {
                 i in i.lastLocation != nil
             }){ item in
                 MapAnnotation(coordinate: item.lastLocation!.toCLLocation().coordinate){
@@ -54,7 +59,7 @@ struct MapMenu: View {
             }
             .onAppear {
                 defaultRegion.center = findMidpointOfItemLocations(items: itemsRepo.items).coordinate
-                print(defaultRegion.center)
+//                print(defaultRegion.center)
             }
             .navigationTitle("Last location of your items")
             .navigationBarTitleDisplayMode(.inline)

@@ -22,7 +22,6 @@ final class FIRMessagesRepository: MessagesRepository {
     @Published private(set) var lastMessageId: String = ""
     @Published private(set) var isLoading: Bool = false
     
-    //TODO: IMPLEMENT LOADING OF IMAGES AND AUDIO MESSAGES
     func getMessages(convID: String) {
         if let userID = auth.currentUser?.uid {
             self.isLoading = true
@@ -57,7 +56,6 @@ final class FIRMessagesRepository: MessagesRepository {
                                 )
                                 
                             } else if let imageUrl = data["image_url"] as? String {
-                                
                                 let imageFileURL = self.documentsPath.appendingPathComponent(imageUrl)
                                 
                                 if await self.downloadFile(strURL: imageUrl){
@@ -69,7 +67,7 @@ final class FIRMessagesRepository: MessagesRepository {
                             } else if let audioUrl = data["audio_url"] as? String {
                                 let audioFileURL = self.documentsPath.appendingPathComponent(audioUrl)
                                 
-                                print("AUDIO FILE DOWNLOAD LOCATION: \(audioFileURL)")
+//                                print("AUDIO FILE DOWNLOAD LOCATION: \(audioFileURL)")
                                 
                                 if await self.downloadFile(strURL: audioUrl) {
                                     messageTemp.append(
@@ -100,11 +98,11 @@ final class FIRMessagesRepository: MessagesRepository {
     func sendMessage(convID: String, message: Message, _ completionHandler: @escaping (Bool) -> Void) {
         if let userID = auth.currentUser?.uid {
             
-            let prefix = convID.prefix(userID.count)
-            let interlocutorID = String(prefix == userID ? convID.suffix(userID.count) : prefix)
+//            let prefix = convID.prefix(userID.count)
+//            let interlocutorID = String(prefix == userID ? convID.suffix(userID.count) : prefix)
 
             var messageDict: [String: Any] = [
-                "sender": (message.isReceived ? interlocutorID : userID) as String,
+                "sender": userID as String,
                 "timestamp": FieldValue.serverTimestamp()
             ]
             
@@ -176,6 +174,8 @@ final class FIRMessagesRepository: MessagesRepository {
                     completionHandler(false)
                     return
                 }
+                
+                completionHandler(true)
             }
         
 //        //TODO: PROVIDE LIST OF DEVICES TO PING
@@ -187,7 +187,7 @@ final class FIRMessagesRepository: MessagesRepository {
     }
     
     @MainActor
-    private func downloadFile(strURL: String) async -> Bool{
+    private func downloadFile(strURL: String) async -> Bool {
         do {
             let gsReference = self.st.reference().child(strURL)
             

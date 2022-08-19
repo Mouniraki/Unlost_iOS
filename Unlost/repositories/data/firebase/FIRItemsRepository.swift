@@ -57,7 +57,7 @@ final class FIRItemsRepository: ItemsRepository {
                 return Item(id: snapshot.documentID,
                             name: data["item_name"] as! String,
                             description: data["item_description"] as! String,
-                            type: ItemType.allCases[(data["item_type"] as! Int) % 4],
+                            type: ItemType.allCases[data["item_type"] as! Int],
                             lastLocation: Location.fromFIRGeopoint(from: data["last_location"] as? GeoPoint ?? nil),
                             isLost: data["is_lost"] as! Bool)
             } else {
@@ -79,13 +79,17 @@ final class FIRItemsRepository: ItemsRepository {
                 "is_lost": item.isLost as Bool
             ]
             
-            //TODO: FIND HOW TO GET THE COMPLETION STATE OF THE ADD OPERATION
             db.collection("Users")
                 .document(userID)
                 .collection("Items")
-                .addDocument(data: itemDict)
-            
-            completionHandler(true)
+                .addDocument(data: itemDict) { error in
+                    guard error == nil else {
+                        completionHandler(false)
+                        return
+                    }
+                    
+                    completionHandler(true)
+                }
         }
     }
     
@@ -98,8 +102,8 @@ final class FIRItemsRepository: ItemsRepository {
                     .collection("Items")
                     .document(items[i].id)
                     .delete() { error in
-                        if let err = error {
-                            print(err.localizedDescription)
+                        if error != nil {
+//                            print(err.localizedDescription)
                             completionHandler(false)
                         } else {
                             completionHandler(true)
