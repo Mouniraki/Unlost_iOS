@@ -69,7 +69,8 @@ final class GoogleSignInRepo: SignInRepository {
                         ]
                             
                         db.setData(userDict) { error in
-                            guard error != nil else {
+                            guard error == nil else {
+//                                print(error!.localizedDescription)
                                 completionHandler(false)
                                 return
                             }
