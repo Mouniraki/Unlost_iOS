@@ -8,6 +8,7 @@
 import Foundation
 import Firebase
 import FirebaseDatabase
+import UIKit
 
 final class FIRConversationsRepository: ConversationsRepository {
     private let auth = Auth.auth()
@@ -39,16 +40,19 @@ final class FIRConversationsRepository: ConversationsRepository {
                                 // EACH CONVERSATION ID IS THE CONCATENATION OF BOTH THE CURRENT USERID & THE INTERLOCUTOR ID
                                 let convIDPrefix = conversation.documentID.prefix(userID.count)
                                 let interlocutorID = String(convIDPrefix == userID ? conversation.documentID.suffix(userID.count) : convIDPrefix)
-                                let user = await FIRUserRepository().getUser(userID: interlocutorID)
+                                let user = await FIRUserRepository().getUser(userID: interlocutorID) ?? User(id: "ANONYMOUSID",
+                                                                                                             firstName: "Anonymous",
+                                                                                                             lastName: "User",
+                                                                                                             profilePicture: UIImage(systemName: "person.fill") ?? UIImage())
                                 
                                 let itemID = (data!["lost_item_id"] as! String).split(separator: ":")
                                 let isMyItem = itemID[0] == userID
                                 let item = await FIRItemsRepository().getItem(userID: String(itemID[0]), itemID: String(itemID[1]))
                                 
-                                if user != nil && item != nil {
+                                if item != nil {
                                     list.append(
                                         Conversation(id: convref.documentID,
-                                                     user: user!,
+                                                     user: user,
                                                      item: item!,
                                                      isMyItem: isMyItem)
                                     )

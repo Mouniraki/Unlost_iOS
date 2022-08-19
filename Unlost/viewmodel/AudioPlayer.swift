@@ -14,6 +14,7 @@ final class AudioPlayer: ObservableObject {
     func setUpAudioPlayer(url: URL) {
         do {
             player = try AVAudioPlayer(contentsOf: url)
+            try AVAudioSession.sharedInstance().overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
         } catch {
             print(error.localizedDescription)
         }
