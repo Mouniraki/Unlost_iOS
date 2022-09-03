@@ -16,7 +16,6 @@ protocol ConversationsRepository: ObservableObject {
     func removeConversation(at offsets: IndexSet, _ completionHandler: @escaping (Bool) -> Void)
     
     func resetConversations()
-
 }
 
 extension ConversationsRepository {

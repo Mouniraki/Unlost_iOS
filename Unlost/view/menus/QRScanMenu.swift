@@ -99,7 +99,7 @@ struct QRScanMenu: View {
                             .alert("Unable to start the camera. Please make sure you granted camera permissions and try again.", isPresented: $showNoCameraPermissionsAlert){
                                 Button("OK", role: .cancel){}
                             }
-                            .alert("Error: the QR code doesn't belong to a valid item, or you already notified the user for this item.", isPresented: $showProcessingErrorAlert){
+                            .alert("Error: the QR code doesn't belong to a valid item.", isPresented: $showProcessingErrorAlert){
                                 Button("OK", role: .cancel){}
                             }
                         }
