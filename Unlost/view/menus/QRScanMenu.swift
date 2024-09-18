@@ -10,7 +10,7 @@ import SwiftUI
 import AVFoundation
 
 struct QRScanMenu: View {
-    @Environment (\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var convRepo: FIRConversationsRepository
     
     @State private var qrText = ""

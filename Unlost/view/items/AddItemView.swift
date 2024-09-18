@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddItemView: View {
-    @Environment (\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var itemsRepo: FIRItemsRepository
     
     @State private var itemName = ""

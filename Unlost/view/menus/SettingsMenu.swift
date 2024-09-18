@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 
 struct SettingsMenu: View {
-    @Environment (\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userRepo: FIRUserRepository
     @EnvironmentObject var signInRepo: GoogleSignInRepo
     
